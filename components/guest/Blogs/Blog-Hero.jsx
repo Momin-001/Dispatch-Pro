@@ -8,7 +8,7 @@ export function BlogHero() {
         <div className="max-w-3xl">
           <div
             className={cn(
-              "inline-flex items-center gap-2 rounded-lg bg-background/20 px-3 py-2 text-xs font-bold uppercase tracking-wide text-background sm:text-sm"
+              "inline-flex items-center gap-2 rounded-full bg-background/20 px-3 py-2 text-xs font-bold uppercase tracking-wide text-background sm:text-sm"
             )}
           >
             <span>INSIGHTS & UPDATES</span>
@@ -18,7 +18,7 @@ export function BlogHero() {
             Industry Blogs
           </h1>
 
-          <p className="mt-6 max-w-2xl text-lg text-background/80 sm:text-xl">
+          <p className="mt-6 max-w-2xl text-lg text-background/70 sm:text-xl">
           Stay informed with the latest news, tips, and insights from the trucking and logistics industry
           </p>
         </div>

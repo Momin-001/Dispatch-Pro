@@ -18,7 +18,7 @@ const pageData = {
         "line2": "Career with",
         "line3": "Cutting-Edge Tools",
       },
-      "description": "Join thousands of professional drivers earning more, getting home faster, and enjoying better working conditions. No forced dispatch. Full transparency. Fair pay every time.",
+      "description": "Join a team that values your expertise. Manage loads efficiently with our advanced dispatch platform, competitive compensation, and work-life balance.",
       "cta": {
         "label": "Apply as Dispatcher",
         "href": "/signup"

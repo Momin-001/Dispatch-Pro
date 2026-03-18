@@ -13,7 +13,7 @@ const NAV_LINKS = [
   { href: "/dispatchers", label: "Dispatchers" },
   { href: "/shippers", label: "Shippers" },
   { href: "/blogs", label: "Blogs" },
-  { href: "/faq", label: "FAQ" },
+  { href: "/faqs", label: "FAQ" },
   { href: "/about", label: "About" },
   { href: "/contact", label: "Contact" },
 ] 
@@ -40,7 +40,7 @@ const CTA_CONFIG = [
     href: "/signup",
   },
   {
-    match: "/faq",
+    match: "/faqs",
     label: "Get Started",
     href: "/signup",
   },

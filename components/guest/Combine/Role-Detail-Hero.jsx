@@ -61,7 +61,7 @@ export function RoleDetailHero({ data }) {
             {title?.line3}
           </h1>
 
-          <p className="mt-6 max-w-2xl text-lg text-background/80 sm:text-xl">
+          <p className="mt-6 max-w-2xl text-lg text-background/70 sm:text-xl">
             {description}
           </p>
 
