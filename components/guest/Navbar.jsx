@@ -14,8 +14,8 @@ const NAV_LINKS = [
   { href: "/shippers", label: "Shippers" },
   { href: "/blogs", label: "Blogs" },
   { href: "/faqs", label: "FAQ" },
-  { href: "/about", label: "About" },
-  { href: "/contact", label: "Contact" },
+  { href: "/about-us", label: "About Us" },
+  { href: "/contact-us", label: "Contact Us" },
 ] 
 
 const CTA_CONFIG = [
@@ -45,12 +45,12 @@ const CTA_CONFIG = [
     href: "/signup",
   },
   {
-    match: "/about",
+    match: "/about-us",
     label: "Get Started",
     href: "/signup",
   },
   {
-    match: "/contact",
+    match: "/contact-us",
     label: "Get Started",
     href: "/signup",
   },
@@ -110,10 +110,10 @@ export function Navbar() {
           })}
         </ul>
 
-        {/* Right: Login + CTA */}
+        {/* Right: Sign In + CTA */}
         <div className="flex shrink-0 items-center gap-2">
           <Button variant="ghost" size="lg" asChild className="hidden sm:inline-flex">
-            <Link href="/login">Login</Link>
+            <Link href="/signin">Sign In</Link>
           </Button>
           <Button variant="destructive" size="lg" asChild className="hidden sm:inline-flex">
             <Link href={getCTA(pathname).href}>{getCTA(pathname).label}</Link>
@@ -159,11 +159,11 @@ export function Navbar() {
           })}
           <li className="mt-2 flex flex-col gap-2 border-t border-background/20 pt-4">
             <Link
-              href="/login"
+              href="/signin"
               onClick={() => setMobileOpen(false)}
               className="rounded-lg px-4 py-3 text-center text-sm font-medium text-background hover:bg-background/10"
             >
-              Login
+              Sign In
             </Link>
             <Button variant="destructive" size="lg" asChild className="w-full">
               <Link href={getCTA(pathname).href} onClick={() => setMobileOpen(false)}>

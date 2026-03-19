@@ -3,9 +3,9 @@ import { Facebook, Twitter, Linkedin, Phone, Mail, MapPin } from "lucide-react";
 
 const QUICK_LINKS = [
   { href: "/services", label: "Services" },
-  { href: "/about", label: "About Us" },
+  { href: "/about-us", label: "About Us" },
   { href: "/how-it-works", label: "How It Works" },
-  { href: "/contact", label: "Contact" },
+  { href: "/contact-us", label: "Contact Us" },
 ];
 
 const FOR_YOU_LINKS = [
