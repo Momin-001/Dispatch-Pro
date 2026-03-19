@@ -16,7 +16,7 @@ export default function AuthLayout({ children }) {
         "Secure document management",
       ],
     },
-    '/register': {
+    '/signup': {
       title: "Join the Future of Freight Management",
       subtitle:
         "Create your account and get instant access to our comprehensive logistics platform.",

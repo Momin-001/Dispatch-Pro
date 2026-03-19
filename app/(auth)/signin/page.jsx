@@ -98,7 +98,7 @@ export default function SignInPage() {
         </Button>
 
         <p className="mt-2 text-center text-xs text-muted-foreground">
-          Don't have an account? <Link href="/register" className="font-bold hover:underline text-primary-dark">Create account</Link>
+          Don't have an account? <Link href="/signup" className="font-bold hover:underline text-primary-dark">Create account</Link>
         </p>
         <p className="mt-2 border-t flex justify-center border-gray-200 pt-6">
           <Link href="/" className="flex text-xs hover:underline items-center gap-2 text-muted-foreground">

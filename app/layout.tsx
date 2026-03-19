@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono, Inter } from "next/font/google";
 import "./globals.css";
 import { Providers } from "@/components/Providers";
+import NextTopLoader from 'nextjs-toploader';
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -16,7 +17,7 @@ const geistMono = Geist_Mono({
 const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin"],
-}); 
+});
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -33,6 +34,11 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${inter.variable} antialiased`}
       >
+        <NextTopLoader
+          color="#00796B"
+          showSpinner={false}
+          easing="ease"
+        />
         <Providers>{children}</Providers>
       </body>
     </html>
