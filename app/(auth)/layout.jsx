@@ -16,16 +16,6 @@ export default function AuthLayout({ children }) {
         "Secure document management",
       ],
     },
-    '/signup': {
-      title: "Join the Future of Freight Management",
-      subtitle:
-        "Create your account and get instant access to our comprehensive logistics platform.",
-      features: [
-        "Free account - no credit card required",
-        "Access to all platform features",
-        "24/7 customer support",
-      ],
-    },
     '/forget-password': {
       title: "Forgot Your Password?",
       subtitle:
