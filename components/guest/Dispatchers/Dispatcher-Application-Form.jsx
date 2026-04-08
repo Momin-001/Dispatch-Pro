@@ -6,11 +6,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import PhoneInput from "react-phone-number-input";
 import "react-phone-number-input/style.css";
 import { toast } from "sonner";
-import { User, Phone, Mail, IdCard, FileText, ChevronRight } from "lucide-react";
+import { User, Phone, Mail, IdCard, FileText, ChevronRight, Loader2 } from "lucide-react";
 
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import api from "@/lib/axios";
 
 const dispatcherApplicationSchema = z.object({
   fullName: z.string().min(2, "Please enter your full name"),
@@ -56,6 +57,7 @@ export function DispatcherApplicationForm() {
     register,
     handleSubmit,
     control,
+    reset,
     formState: { errors, isSubmitting },
   } = useForm({
     resolver: zodResolver(dispatcherApplicationSchema),
@@ -67,8 +69,29 @@ export function DispatcherApplicationForm() {
     },
   });
 
-  const onSubmit = () => {
-    toast.success("Application submitted");
+  const onSubmit = async (values) => {
+    try {
+      const fd = new FormData();
+      fd.append("fullName", values.fullName);
+      fd.append("email", values.email);
+      fd.append("phone", values.phone);
+      fd.append("role", "dispatcher");
+      fd.append(
+        "meta",
+        JSON.stringify({
+          cdlNumber: values.cdlNumber,
+        })
+      );
+      if (values.resumeFile?.[0]) {
+        fd.append("file", values.resumeFile[0]);
+      }
+
+      const { data } = await api.post("/api/auth/register", fd);
+      toast.success(data.message);
+      reset();
+    } catch {
+      /* axios interceptor handles error toasts */
+    }
   };
 
   return (
@@ -182,9 +205,18 @@ export function DispatcherApplicationForm() {
         <Button
           type="submit"
           disabled={isSubmitting}
-          className="gradient mt-2 h-12 w-full text-sm font-bold text-background"
+          className="gradient mt-2 flex h-12 w-full items-center justify-center gap-2 text-sm font-bold text-background"
         >
-          Submit Application <ChevronRight className="size-4" />
+          {isSubmitting ? (
+            <>
+              <Loader2 className="size-4 animate-spin" aria-hidden />
+              Submitting...
+            </>
+          ) : (
+            <>
+              Submit Application <ChevronRight className="size-4" />
+            </>
+          )}
         </Button>
 
         <p className="mt-3 text-center text-xs text-muted-foreground">

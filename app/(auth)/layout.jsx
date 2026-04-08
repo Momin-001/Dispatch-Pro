@@ -26,10 +26,22 @@ export default function AuthLayout({ children }) {
         "Back to work in minutes",
       ],
     },
+    '/set-password': {
+      title: "Set Your Password",
+      subtitle:
+        "Create a secure password to activate your DispatchPro account.",
+      features: [
+        "Secure password creation",
+        "One-time setup link",
+        "Get started in minutes",
+      ],
+    },
   }
 
+  const page = authData[pathname] || authData['/signin'];
+
     return (
-        <AuthLayoutComponent title={authData[pathname].title} subtitle={authData[pathname].subtitle} features={authData[pathname].features}>
+        <AuthLayoutComponent title={page.title} subtitle={page.subtitle} features={page.features}>
             {children}
         </AuthLayoutComponent>
     )

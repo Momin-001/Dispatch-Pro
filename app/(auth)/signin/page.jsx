@@ -4,11 +4,12 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
-import { Mail, Lock, ArrowLeft } from "lucide-react";
+import { Mail, Lock, ArrowLeft, Loader2 } from "lucide-react";
 import Link from "next/link";
 
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { useAuth } from "@/context/auth-context";
 
 const signInSchema = z.object({
   email: z.string().email("Enter a valid email address"),
@@ -26,6 +27,8 @@ function FieldLabel({ icon: Icon, children, required }) {
 }
 
 export default function SignInPage() {
+  const { login } = useAuth();
+
   const {
     register,
     handleSubmit,
@@ -38,8 +41,13 @@ export default function SignInPage() {
     },
   });
 
-  const onSubmit = () => {
-    toast.success("Sign in successful");
+  const onSubmit = async (values) => {
+    try {
+      const data = await login(values.email, values.password);
+      toast.success(data.message);
+    } catch {
+      /* non-2xx: axios interceptor shows error toast */
+    }
   };
 
   return (
@@ -92,9 +100,16 @@ export default function SignInPage() {
         <Button
           type="submit"
           disabled={isSubmitting}
-          className="gradient mt-2 h-12 w-full text-sm font-bold text-background"
+          className="gradient mt-2 flex h-12 w-full items-center justify-center gap-2 text-sm font-bold text-background"
         >
-          Sign in
+          {isSubmitting ? (
+            <>
+              <Loader2 className="size-4 animate-spin" aria-hidden />
+              Signing in...
+            </>
+          ) : (
+            "Sign in"
+          )}
         </Button>
 
         <p className="mt-2 text-center text-xs text-muted-foreground">

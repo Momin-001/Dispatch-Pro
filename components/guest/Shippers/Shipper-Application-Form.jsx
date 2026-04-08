@@ -6,11 +6,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import PhoneInput from "react-phone-number-input";
 import "react-phone-number-input/style.css";
 import { toast } from "sonner";
-import { User, Phone, Mail, Building2, ChartColumn, Package, ChevronRight } from "lucide-react";
+import { User, Phone, Mail, Building2, ChartColumn, Package, ChevronRight, Loader2 } from "lucide-react";
 
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import api from "@/lib/axios";
 
 const shipperApplicationSchema = z.object({
   fullName: z.string().min(2, "Please enter your full name"),
@@ -44,6 +45,7 @@ export function ShipperApplicationForm({ data }) {
     register,
     handleSubmit,
     control,
+    reset,
     formState: { errors, isSubmitting },
   } = useForm({
     resolver: zodResolver(shipperApplicationSchema),
@@ -57,8 +59,24 @@ export function ShipperApplicationForm({ data }) {
     },
   });
 
-  const onSubmit = () => {
-    toast.success("Application submitted");
+  const onSubmit = async (values) => {
+    try {
+      const { data } = await api.post("/api/auth/register", {
+        fullName: values.fullName,
+        email: values.email,
+        phone: values.phone,
+        role: "shipper",
+        meta: {
+          companyName: values.companyName,
+          monthlyLoads: values.monthlyLoads,
+          shipmentType: values.shipmentType,
+        },
+      });
+      toast.success(data.message);
+      reset();
+    } catch {
+      /* axios interceptor handles error toasts */
+    }
   };
 
   return (
@@ -186,9 +204,18 @@ export function ShipperApplicationForm({ data }) {
         <Button
           type="submit"
           disabled={isSubmitting}
-          className="gradient mt-2 h-12 w-full text-sm font-bold text-background"
+          className="gradient mt-2 flex h-12 w-full items-center justify-center gap-2 text-sm font-bold text-background"
         >
-          {data.label} <ChevronRight className="size-4" />
+          {isSubmitting ? (
+            <>
+              <Loader2 className="size-4 animate-spin" aria-hidden />
+              Submitting...
+            </>
+          ) : (
+            <>
+              {data.label} <ChevronRight className="size-4" />
+            </>
+          )}
         </Button>
 
         <p className="mt-3 text-center text-xs text-muted-foreground">

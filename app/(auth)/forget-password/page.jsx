@@ -4,15 +4,15 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
-import { Mail, ArrowLeft } from "lucide-react";
+import { Mail, ArrowLeft, Loader2 } from "lucide-react";
 import Link from "next/link";
 
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import api from "@/lib/axios";
 
 const forgetPasswordSchema = z.object({
   email: z.string().email("Enter a valid email address"),
-  password: z.string().min(8, "Password must be at least 8 characters"),
 });
 
 function FieldLabel({ icon: Icon, children, required }) {
@@ -29,6 +29,7 @@ export default function ForgetPasswordPage() {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors, isSubmitting },
   } = useForm({
     resolver: zodResolver(forgetPasswordSchema),
@@ -37,8 +38,16 @@ export default function ForgetPasswordPage() {
     },
   });
 
-  const onSubmit = () => {
-    toast.success("Password reset email sent");
+  const onSubmit = async (values) => {
+    try {
+      const { data } = await api.post("/api/auth/forgot-password", {
+        email: values.email,
+      });
+      toast.success(data.message);
+      reset();
+    } catch {
+      /* axios interceptor handles error toasts */
+    }
   };
 
   return (
@@ -70,9 +79,16 @@ export default function ForgetPasswordPage() {
         <Button
           type="submit"
           disabled={isSubmitting}
-          className="gradient mt-2 h-12 w-full text-sm font-bold text-background"
+          className="gradient mt-2 flex h-12 w-full items-center justify-center gap-2 text-sm font-bold text-background"
         >
-          Reset Password
+          {isSubmitting ? (
+            <>
+              <Loader2 className="size-4 animate-spin" aria-hidden />
+              Sending...
+            </>
+          ) : (
+            "Send reset link"
+          )}
         </Button>
 
         <p className="mt-2 flex justify-center text-xs hover:underline text-muted-foreground">
