@@ -3,9 +3,10 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
-import { Menu, X } from "lucide-react";
+import { Menu, X, User, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { useAuth } from "@/context/auth-context";
 
 const NAV_LINKS = [
   { href: "/", label: "Home" },
@@ -14,9 +15,9 @@ const NAV_LINKS = [
   { href: "/shippers", label: "Shippers" },
   { href: "/blogs", label: "Blogs" },
   { href: "/faqs", label: "FAQ" },
-  { href: "/about-us", label: "About Us" },
-  { href: "/contact-us", label: "Contact Us" },
-] 
+  { href: "/about-us", label: "About" },
+  { href: "/contact-us", label: "Contact" },
+]
 
 const CTA_CONFIG = [
   {
@@ -76,7 +77,7 @@ function getCTA(pathname) {
 export function Navbar() {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
-
+  const { user, isLoading } = useAuth();
   return (
     <header className="fixed left-0 right-0 top-0 z-50 w-full bg-black/20 backdrop-blur-md">
       <nav className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
@@ -91,7 +92,7 @@ export function Navbar() {
         </Link>
 
         {/* Desktop nav links - center */}
-        <ul className="hidden items-center gap-6 md:flex md:gap-4 lg:gap-8">
+        <ul className="hidden items-center gap-6 lg:flex lg:gap-8">
           {NAV_LINKS.map(({ href, label }) => {
             const isActive = pathname === href;
             return (
@@ -112,17 +113,31 @@ export function Navbar() {
 
         {/* Right: Sign In + CTA */}
         <div className="flex shrink-0 items-center gap-2">
-          <Button variant="ghost" size="lg" asChild className="hidden sm:inline-flex">
-            <Link href="/signin">Sign In</Link>
-          </Button>
-          <Button variant="destructive" size="lg" asChild className="hidden sm:inline-flex">
-            <Link href={getCTA(pathname).href}>{getCTA(pathname).label}</Link>
-          </Button>
+
+          {isLoading ? (
+            <div className="flex min-h-screen items-center justify-center">
+              <Loader2 className="size-6 animate-spin text-secondary" />
+            </div>
+          ) : (
+            (user && !isLoading) ? (
+              <Button variant="destructive" size="lg" asChild className="hidden sm:inline-flex">
+                <Link href={`/${user.role.toLowerCase()}`}> <User className="size-4" /> Dashboard</Link>
+              </Button>
+            ) : (
+              <>
+                <Button variant="ghost" size="lg" asChild className="hidden sm:inline-flex">
+                  <Link href="/signin">Sign In</Link>
+                </Button>
+                <Button variant="destructive" size="lg" asChild className="hidden sm:inline-flex">
+                  <Link href={getCTA(pathname).href}>{getCTA(pathname).label}</Link>
+                </Button>
+              </>
+            ))}
 
           {/* Mobile menu button */}
           <button
             type="button"
-            className="inline-flex size-10 items-center justify-center rounded-lg text-background hover:bg-background/10 md:hidden"
+            className="inline-flex size-10 items-center justify-center rounded-lg text-background hover:bg-background/10 lg:hidden"
             onClick={() => setMobileOpen((o) => !o)}
             aria-expanded={mobileOpen}
             aria-label="Toggle menu"
@@ -135,7 +150,7 @@ export function Navbar() {
       {/* Mobile menu panel */}
       <div
         className={cn(
-          "absolute left-0 right-0 top-16 overflow-hidden bg-primary-dark/95 backdrop-blur-md transition-[max-height,opacity] duration-300 ease-out md:hidden",
+          "absolute left-0 right-0 top-16 overflow-hidden bg-primary-dark/95 backdrop-blur-md transition-[max-height,opacity] duration-300 ease-out lg:hidden",
           mobileOpen ? "max-h-[80vh] opacity-100" : "max-h-0 opacity-0"
         )}
       >
@@ -157,19 +172,33 @@ export function Navbar() {
               </li>
             );
           })}
-          <li className="mt-2 flex flex-col gap-2 border-t border-background/20 pt-4">
-            <Link
-              href="/signin"
-              onClick={() => setMobileOpen(false)}
-              className="rounded-lg px-4 py-3 text-center text-sm font-medium text-background hover:bg-background/10"
-            >
-              Sign In
-            </Link>
-            <Button variant="destructive" size="lg" asChild className="w-full">
-              <Link href={getCTA(pathname).href} onClick={() => setMobileOpen(false)}>
-                {getCTA(pathname).label}
-              </Link>
-            </Button>
+          <li className="mt-2 flex flex-col gap-2 border-t border-background/20 pt-4 sm:hidden">
+            {
+             isLoading ? (
+              <div className="flex min-h-screen items-center justify-center">
+                <Loader2 className="size-6 animate-spin text-secondary" />
+              </div>
+            ) : (
+            (user && !isLoading) ? (
+              <Button variant="destructive" size="lg" asChild className="w-full">
+                <Link href={`/${user.role.toLowerCase()}`}> <User className="size-4" /> Dashboard</Link>
+              </Button>
+            ) : (
+              <>
+                <Link
+                  href="/signin"
+                  onClick={() => setMobileOpen(false)}
+                  className="rounded-lg px-4 py-3 text-center text-sm font-medium text-background hover:bg-background/10"
+                >
+                  Sign In
+                </Link>
+                <Button variant="destructive" size="lg" asChild className="w-full">
+                  <Link href={getCTA(pathname).href} onClick={() => setMobileOpen(false)}>
+                    {getCTA(pathname).label}
+                  </Link>
+                </Button>
+              </>
+            ))}
           </li>
         </ul>
       </div>
