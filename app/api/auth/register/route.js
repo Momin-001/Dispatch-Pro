@@ -22,23 +22,36 @@ const INITIAL_UPLOAD_SLUG_BY_ROLE = {
   dispatcher: "dispatcher-resume",
 };
 
-/**
- * Ensures meta is a plain object. Spreading a string ({ ...meta }) produces
- * numeric keys per character — that is how bad JSONB rows were created.
- */
-function normalizeMeta(meta) {
-  if (meta == null || meta === "") return {};
-  if (typeof meta === "string") {
-    try {
-      const parsed = JSON.parse(meta);
-      if (parsed && typeof parsed === "object" && !Array.isArray(parsed)) return { ...parsed };
-    } catch {
-      return {};
-    }
-    return {};
+const PROFILE_FIELD_NAMES = [
+  "licenseNumber",
+  "yearsExperience",
+  "equipmentType",
+  "companyName",
+  "monthlyLoadEstimate",
+  "serviceType",
+  "region",
+];
+
+function emptyToNull(v) {
+  if (v == null) return null;
+  const s = String(v).trim();
+  return s === "" ? null : s;
+}
+
+function profileFromFormData(formData) {
+  const out = {};
+  for (const key of PROFILE_FIELD_NAMES) {
+    out[key] = emptyToNull(formData.get(key));
   }
-  if (typeof meta === "object" && !Array.isArray(meta)) return { ...meta };
-  return {};
+  return out;
+}
+
+function profileFromBody(body) {
+  const out = {};
+  for (const key of PROFILE_FIELD_NAMES) {
+    out[key] = emptyToNull(body?.[key]);
+  }
+  return out;
 }
 
 async function parseRequest(request) {
@@ -46,20 +59,6 @@ async function parseRequest(request) {
 
   if (contentType.includes("multipart/form-data")) {
     const formData = await request.formData();
-
-    let meta = {};
-    const metaRaw = formData.get("meta");
-    if (metaRaw != null && String(metaRaw).trim() !== "") {
-      try {
-        const parsed = JSON.parse(String(metaRaw));
-        if (parsed == null || typeof parsed !== "object" || Array.isArray(parsed)) {
-          return { error: "Meta must be a JSON object." };
-        }
-        meta = parsed;
-      } catch {
-        return { error: "Invalid meta JSON." };
-      }
-    }
 
     const fileEntry = formData.get("file");
     const file =
@@ -75,7 +74,7 @@ async function parseRequest(request) {
       email: formData.get("email"),
       phone: formData.get("phone"),
       roleName: formData.get("role"),
-      meta,
+      ...profileFromFormData(formData),
       file,
     };
   }
@@ -86,7 +85,7 @@ async function parseRequest(request) {
     email: body.email,
     phone: body.phone,
     roleName: body.role,
-    meta: normalizeMeta(body.meta),
+    ...profileFromBody(body),
     file: null,
   };
 }
@@ -95,12 +94,20 @@ export async function POST(request) {
   try {
     const parsed = await parseRequest(request);
 
-    if (parsed.error) {
-      return errorResponse(parsed.error, 400);
-    }
-
-    const { fullName, email, phone, roleName, file } = parsed;
-    const meta = normalizeMeta(parsed.meta);
+    const {
+      fullName,
+      email,
+      phone,
+      roleName,
+      file,
+      licenseNumber,
+      yearsExperience,
+      equipmentType,
+      companyName,
+      monthlyLoadEstimate,
+      serviceType,
+      region,
+    } = parsed;
 
     if (!fullName || !email || !roleName) {
       return errorResponse("Full name, email, and role are required.", 400);
@@ -136,12 +143,7 @@ export async function POST(request) {
 
     const needsInitialDocument = roleName === "driver" || roleName === "dispatcher";
     if (needsInitialDocument && !file) {
-      return errorResponse(
-        roleName === "driver"
-          ? "CDL document is required."
-          : "Resume is required.",
-        400
-      );
+      return errorResponse(roleName === "driver" ? "CDL document is required." : "Resume is required.", 400);
     }
 
     if (roleName === "shipper" && file) {
@@ -169,10 +171,7 @@ export async function POST(request) {
         .limit(1);
 
       if (!docType) {
-        return errorResponse(
-          "Verification document type is not configured. Run database seed.",
-          500
-        );
+        return errorResponse("Verification document type is not configured. Run database seed.", 500 );
       }
 
       docTypeRow = docType;
@@ -181,10 +180,9 @@ export async function POST(request) {
       uploadResult = await uploadApplicationFile(buffer, {
         role: roleName,
         mimeType: file.type || "application/octet-stream",
+        originalFilename: file.name,
       });
     }
-
-    const finalMeta = Object.keys(meta).length > 0 ? meta : null;
 
     const rawToken = crypto.randomBytes(48).toString("hex");
     const tokenHash = hashToken(rawToken);
@@ -198,7 +196,13 @@ export async function POST(request) {
           phone: String(phone).trim(),
           roleId: role.id,
           status: "pending_password",
-          meta: finalMeta,
+          licenseNumber,
+          yearsExperience,
+          equipmentType,
+          companyName,
+          monthlyLoadEstimate,
+          serviceType,
+          region,
         })
         .returning();
 

@@ -1,4 +1,7 @@
+"use client";
+
 export default function DispatcherDashboard() {
+
   return (
     <div>
       <h2 className="text-2xl font-bold">Dispatcher Dashboard</h2>

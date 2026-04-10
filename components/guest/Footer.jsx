@@ -10,7 +10,7 @@ const QUICK_LINKS = [
 
 const FOR_YOU_LINKS = [
   { href: "/drivers", label: "For Drivers" },
-  { href: "/owner-operators", label: "For Owner-Operators" },
+  { href: "/owner_operators", label: "For Owner Operators" },
   { href: "/shippers", label: "For Shippers" },
   { href: "/careers", label: "Careers" },
 ];

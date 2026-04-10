@@ -83,14 +83,9 @@ export function DriverApplicationForm() {
       fd.append("email", values.email);
       fd.append("phone", values.phone);
       fd.append("role", "driver");
-      fd.append(
-        "meta",
-        JSON.stringify({
-          cdlNumber: values.cdlNumber,
-          yearsExperience: values.yearsExperience,
-          equipmentType: values.equipmentType,
-        })
-      );
+      fd.append("licenseNumber", values.cdlNumber);
+      fd.append("yearsExperience", values.yearsExperience);
+      fd.append("equipmentType", values.equipmentType);
       if (values.cdlFile?.[0]) {
         fd.append("file", values.cdlFile[0]);
       }

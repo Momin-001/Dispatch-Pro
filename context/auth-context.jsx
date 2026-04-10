@@ -11,7 +11,7 @@ const DASHBOARD_ROUTES = {
   driver: "/driver",
   dispatcher: "/dispatcher",
   shipper: "/shipper",
-  owner_operator: "/owner-operator",
+  owner_operator: "/owner_operator",
 };
 
 export function AuthProvider({ children }) {

@@ -11,7 +11,7 @@ const DASHBOARD_PREFIXES = [
   "/driver",
   "/dispatcher",
   "/shipper",
-  "/owner-operator",
+  "/owner_operator",
 ];
 
 const ROLE_DASHBOARD_MAP: Record<string, string> = {
@@ -19,7 +19,7 @@ const ROLE_DASHBOARD_MAP: Record<string, string> = {
   driver: "/driver",
   dispatcher: "/dispatcher",
   shipper: "/shipper",
-  owner_operator: "/owner-operator",
+  owner_operator: "/owner_operator",
 };
 
 async function verifyAccessToken(token: string) {
@@ -76,7 +76,7 @@ export const config = {
     "/driver/:path*",
     "/dispatcher/:path*",
     "/shipper/:path*",
-    "/owner-operator/:path*",
+    "/owner_operator/:path*",
     "/signin",
     "/forget-password",
     "/set-password",

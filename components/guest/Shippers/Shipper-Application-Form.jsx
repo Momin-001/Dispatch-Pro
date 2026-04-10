@@ -6,7 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import PhoneInput from "react-phone-number-input";
 import "react-phone-number-input/style.css";
 import { toast } from "sonner";
-import { User, Phone, Mail, Building2, ChartColumn, Package, ChevronRight, Loader2 } from "lucide-react";
+import { User, Phone, Mail, Building2, ChartColumn, Truck, ChevronRight, Loader2 } from "lucide-react";
 
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -27,7 +27,7 @@ const shipperApplicationSchema = z.object({
     .string()
     .min(1, "Monthly loads is required")
     .regex(/^\d{1,8}$/u, "Enter up to 8 numeric digits for monthly loads"),
-  shipmentType: z.string().min(1, "Shipment type is required"),
+  equipmentType: z.string().min(1, "Equipment type is required"),
 });
 
 function FieldLabel({ icon: Icon, children, required }) {
@@ -55,7 +55,7 @@ export function ShipperApplicationForm({ data }) {
       email: "",
       companyName: "",
       monthlyLoads: "",
-      shipmentType: "",
+      equipmentType: "",
     },
   });
 
@@ -66,11 +66,9 @@ export function ShipperApplicationForm({ data }) {
         email: values.email,
         phone: values.phone,
         role: "shipper",
-        meta: {
-          companyName: values.companyName,
-          monthlyLoads: values.monthlyLoads,
-          shipmentType: values.shipmentType,
-        },
+        companyName: values.companyName,
+        monthlyLoadEstimate: values.monthlyLoads,
+        equipmentType: values.equipmentType,
       });
       toast.success(data.message);
       reset();
@@ -167,17 +165,17 @@ export function ShipperApplicationForm({ data }) {
         {/* Years + equipment */}
         <div className="grid gap-4 sm:grid-cols-2">
           <div>
-            <FieldLabel icon={Package} required>
-              Shipment Type
+            <FieldLabel icon={Truck} required>
+              Equipment Type
             </FieldLabel>
             <Input
-              placeholder="e.g. Full Truckload, LTL, Intermodal"
-              aria-invalid={!!errors.shipmentType}
-              {...register("shipmentType")}
+              placeholder="e.g. Dry Van, Reefer, Flatbed"
+              aria-invalid={!!errors.equipmentType}
+              {...register("equipmentType")}
             />
-            {errors.shipmentType && (
+            {errors.equipmentType && (
               <p className="mt-1 text-xs text-destructive">
-                {errors.shipmentType.message}
+                {errors.equipmentType.message}
               </p>
             )}
           </div>

@@ -1,19 +1,33 @@
 "use client";
 
 import { useAuth } from "@/context/auth-context";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { useEffect } from "react";
 import { Loader2 } from "lucide-react";
+
+import { Sidebar } from "@/components/dashboard/Sidebar";
+import { DashboardHeader } from "@/components/dashboard/Header";
 
 export default function DashboardLayout({ children }) {
   const { user, isLoading, isAuthenticated } = useAuth();
   const router = useRouter();
+  const pathname = usePathname();
+  const isVerificationPage = pathname?.endsWith("/verification");
 
   useEffect(() => {
-    if (!isLoading && !isAuthenticated) {
-      router.replace("/signin");
+    if (isLoading || !isAuthenticated) return;
+
+    const role = user.role.toLowerCase();
+    const isApproved = user.status === "approved";
+
+    if (!isApproved && !isVerificationPage) {
+      router.replace(`/${role}/verification`);
     }
-  }, [isLoading, isAuthenticated, router]);
+
+    if (isApproved && isVerificationPage) {
+      router.replace(`/${role}`);
+    }
+  }, [isLoading, isAuthenticated, user, isVerificationPage, router]);
 
   if (isLoading) {
     return (
@@ -23,35 +37,22 @@ export default function DashboardLayout({ children }) {
     );
   }
 
-  if (!isAuthenticated) {
-    return null;
-  }
+  // Unauthenticated — redirect to signin is handled elsewhere
+  if (!isAuthenticated) return null;
 
+  // Approved user trying to access verification — redirect pending
+  if (user.status === "approved" && isVerificationPage) return null;
+
+  // Unapproved user trying to access dashboard — redirect pending
+  if (user.status !== "approved" && !isVerificationPage) return null;
+  
   return (
     <div className="flex min-h-screen">
-      {/* Sidebar placeholder — will be built per-role later */}
-      <aside className="hidden w-64 shrink-0 border-r border-border bg-card lg:block">
-        <div className="flex h-16 items-center gap-2 border-b border-border px-6">
-          <span className="text-lg font-bold text-primary-dark">DISPATCH</span>
-          <span className="text-lg font-bold text-secondary">PRO</span>
-        </div>
-        <nav className="p-4">
-          <p className="text-sm text-muted-foreground">
-            Logged in as <span className="font-semibold text-foreground">{user?.role}</span>
-          </p>
-        </nav>
-      </aside>
+      <Sidebar />
 
-      {/* Main content */}
-      <div className="flex flex-1 flex-col">
-        {/* Top bar placeholder */}
-        <header className="flex h-16 items-center justify-between border-b border-border bg-card px-6">
-          <h1 className="text-sm font-semibold text-foreground">
-            {user?.fullName}
-          </h1>
-        </header>
-
-        <main className="flex-1 overflow-y-auto bg-[#F9FAFB] p-6">
+      <div className="flex min-w-0 flex-1 flex-col">
+        <DashboardHeader />
+        <main className="min-w-0 flex-1 overflow-y-auto overflow-x-hidden bg-[#F9FAFB] p-4 sm:p-6">
           {children}
         </main>
       </div>

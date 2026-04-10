@@ -24,6 +24,11 @@ const dispatcherApplicationSchema = z.object({
     .string()
     .min(1, "CDL number is required")
     .regex(/^\d+$/, "CDL number must contain digits only"),
+  yearsExperience: z
+    .string()
+    .min(1, "Experience is required")
+    .max(10, "Use a shorter value"),
+  region: z.string().min(1, "Region is required").max(255, "Region is too long"),
   resumeFile: z
     .any()
     .refine((fileList) => fileList instanceof FileList && fileList.length === 1, {
@@ -66,6 +71,8 @@ export function DispatcherApplicationForm() {
       phone: "+1",
       email: "",
       cdlNumber: "",
+      yearsExperience: "",
+      region: "",
     },
   });
 
@@ -76,12 +83,9 @@ export function DispatcherApplicationForm() {
       fd.append("email", values.email);
       fd.append("phone", values.phone);
       fd.append("role", "dispatcher");
-      fd.append(
-        "meta",
-        JSON.stringify({
-          cdlNumber: values.cdlNumber,
-        })
-      );
+      fd.append("licenseNumber", values.cdlNumber);
+      fd.append("yearsExperience", values.yearsExperience);
+      fd.append("region", values.region);
       if (values.resumeFile?.[0]) {
         fd.append("file", values.resumeFile[0]);
       }
@@ -179,6 +183,32 @@ export function DispatcherApplicationForm() {
           {errors.cdlNumber && (
             <p className="mt-1 text-xs text-destructive">{errors.cdlNumber.message}</p>
           )}
+        </div>
+
+        {/* Experience + Region */}
+        <div className="grid gap-4 sm:grid-cols-2">
+          <div>
+            <FieldLabel required>Years of experience</FieldLabel>
+            <Input
+              placeholder="e.g. 5"
+              aria-invalid={!!errors.yearsExperience}
+              {...register("yearsExperience")}
+            />
+            {errors.yearsExperience && (
+              <p className="mt-1 text-xs text-destructive">{errors.yearsExperience.message}</p>
+            )}
+          </div>
+          <div>
+            <FieldLabel required>Region</FieldLabel>
+            <Input
+              placeholder="e.g. Midwest, Southeast"
+              aria-invalid={!!errors.region}
+              {...register("region")}
+            />
+            {errors.region && (
+              <p className="mt-1 text-xs text-destructive">{errors.region.message}</p>
+            )}
+          </div>
         </div>
 
         {/* Upload Resume */}
