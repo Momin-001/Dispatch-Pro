@@ -23,39 +23,10 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { cn } from "@/lib/utils";
 import api from "@/lib/axios";
 import { Card } from "@/components/ui/card";
-
-const DOC_STATUS_STYLES = {
-  pending: "bg-amber-100 text-amber-700",
-  approved: "bg-green-100 text-green-700",
-  rejected: "bg-red-100 text-red-700",
-  reupload_requested: "bg-orange-100 text-orange-700",
-};
-
-const DOC_STATUS_LABELS = {
-  pending: "Pending",
-  approved: "Approved",
-  rejected: "Rejected",
-  reupload_requested: "Re-upload Requested",
-};
-
-function DocStatusBadge({ status }) {
-  return (
-    <span className={cn("inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium", DOC_STATUS_STYLES[status] || "bg-gray-100 text-gray-700")}>
-      {DOC_STATUS_LABELS[status] || status}
-    </span>
-  );
-}
-
-function getDownloadUrl(fileUrl) {
-  if (!fileUrl) return fileUrl;
-  if (fileUrl.includes("/upload/")) {
-    return fileUrl.replace("/upload/", "/upload/fl_attachment/");
-  }
-  return fileUrl;
-}
+import { getDownloadUrl } from "@/components/dashboard/Applications/application-helpers";
+import { DocStatusBadge } from "@/components/dashboard/Applications/application-helpers";
 
 function InfoRow({ label, value }) {
   return (

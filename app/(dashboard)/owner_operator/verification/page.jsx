@@ -16,7 +16,7 @@ import {
   EditableFieldLabel,
   DocumentsSection,
   documentRowKey,
-} from "@/components/dashboard/verification-shared";
+} from "@/components/dashboard/Verification/verification-helpers";
 
 const currentYear = new Date().getFullYear();
 

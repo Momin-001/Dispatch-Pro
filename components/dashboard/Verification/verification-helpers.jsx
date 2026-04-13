@@ -7,33 +7,13 @@ import {
   Download,
   Eye,
   FileText,
-  CheckCircle2,
-  Clock,
-  XCircle,
-  RotateCcw,
   Plus,
   X,
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
-
-const STATUS_CONFIG = {
-  pending: { label: "Pending", icon: Clock, className: "text-amber-600 bg-amber-50" },
-  approved: { label: "Approved", icon: CheckCircle2, className: "text-green-600 bg-green-50" },
-  rejected: { label: "Rejected", icon: XCircle, className: "text-red-600 bg-red-50" },
-  reupload_requested: { label: "Re-upload", icon: RotateCcw, className: "text-orange-600 bg-orange-50" },
-};
-
-function DocStatusBadge({ status }) {
-  const cfg = STATUS_CONFIG[status] || STATUS_CONFIG.pending;
-  return (
-    <span className={cn("inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-medium", cfg.className)}>
-      <cfg.icon className="size-3" />
-      {cfg.label}
-    </span>
-  );
-}
+import { DocStatusBadge } from "@/components/dashboard/Applications/application-helpers";
+import { getDownloadUrl } from "@/components/dashboard/Applications/application-helpers";
 
 export function SectionCard({ title, children }) {
   return (
@@ -61,14 +41,6 @@ export function EditableFieldLabel({ label }) {
       {label} <span className="text-primary">(Editable)</span>
     </p>
   );
-}
-
-function getDownloadUrl(fileUrl) {
-  if (!fileUrl) return fileUrl;
-  if (fileUrl.includes("/upload/")) {
-    return fileUrl.replace("/upload/", "/upload/fl_attachment/");
-  }
-  return fileUrl;
 }
 
 export function DocumentRow({ doc, onUpload, uploading }) {
