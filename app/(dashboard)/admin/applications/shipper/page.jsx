@@ -1,7 +1,7 @@
 "use client";
 
 import { format } from "date-fns";
-import { ApplicationsTable } from "@/components/dashboard/Applications/ApplicationsTable";
+import { ApplicationsTable } from "@/components/dashboard/applications/ApplicationsTable";
 
 const columns = [
   { key: "fullName", header: "Name (Contact Person)" },
