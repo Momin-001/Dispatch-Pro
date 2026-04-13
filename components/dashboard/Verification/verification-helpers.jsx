@@ -12,8 +12,7 @@ import {
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { DocStatusBadge } from "@/components/dashboard/Applications/application-helpers";
-import { getDownloadUrl } from "@/components/dashboard/Applications/application-helpers";
+import { getDownloadUrl, DocStatusBadge } from "@/components/dashboard/Applications/application-helpers";
 
 export function SectionCard({ title, children }) {
   return (
