@@ -25,7 +25,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import api from "@/lib/axios";
 import { Card } from "@/components/ui/card";
-import { getDownloadUrl, DocStatusBadge } from "@/components/dashboard/Applications/application-helpers";
+import { getDownloadUrl, DocStatusBadge } from "@/components/dashboard/helpers";
 
 function InfoRow({ label, value }) {
   return (

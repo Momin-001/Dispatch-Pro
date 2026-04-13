@@ -12,7 +12,7 @@ import {
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { getDownloadUrl, DocStatusBadge } from "@/components/dashboard/Applications/application-helpers";
+import { getDownloadUrl, DocStatusBadge } from "@/components/dashboard/helpers";
 
 export function SectionCard({ title, children }) {
   return (
