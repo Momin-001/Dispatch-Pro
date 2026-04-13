@@ -36,18 +36,11 @@ import { cn } from "@/lib/utils";
 import api from "@/lib/axios";
 import { Card } from "@/components/ui/card";
 
-const STATUS_STYLES = {
-  pending_approval: "bg-amber-100 text-amber-700",
-  approved: "bg-green-100 text-green-700",
-  rejected: "bg-red-100 text-red-700",
-  suspended: "bg-gray-100 text-gray-700",
-};
-
 const STATUS_LABELS = {
-  pending_approval: "Pending",
-  approved: "Approved",
-  rejected: "Rejected",
-  suspended: "Suspended",
+  pending_approval: { label: "Pending", className: "bg-amber-100 text-amber-700" }, 
+  approved: { label: "Approved", className: "bg-green-100 text-green-700" },
+  rejected: { label: "Rejected", className: "bg-red-100 text-red-700" },
+  suspended: { label: "Suspended", className: "bg-gray-100 text-gray-700" },
 };
 
 function StatusBadge({ status }) {
@@ -55,10 +48,10 @@ function StatusBadge({ status }) {
     <span
       className={cn(
         "inline-flex items-center rounded-full px-3 py-2 text-xs font-medium",
-        STATUS_STYLES[status] || "bg-gray-100 text-gray-700"
+        STATUS_LABELS[status]?.className || "bg-gray-100 text-gray-700"
       )}
     >
-      {STATUS_LABELS[status] || status}
+      {STATUS_LABELS[status]?.label || status}
     </span>
   );
 }

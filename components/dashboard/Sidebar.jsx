@@ -43,7 +43,7 @@ function NavItem({ item, pathname, onNavigate }) {
         </button>
 
         {expanded && (
-          <div className="relative ml-10 mt-2">
+          <div className="relative ml-6 mt-2">
             {/* Vertical line */}
             <div className="absolute left-[3.5px] top-3.5 h-[calc(100%-28px)] w-px bg-muted-foreground/20" />
 
