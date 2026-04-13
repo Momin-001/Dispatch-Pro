@@ -47,7 +47,7 @@ export function SectionCard({ title, children }) {
 export function ReadOnlyField({ label, value }) {
   return (
     <div>
-      <p className="mb-1 2xl:text-lg text-base font-medium text-[#364153]">{label}</p>
+      <p className="mb-1 2xl:text-lg text-base font-medium text-foreground-light">{label}</p>
       <div className="flex h-10 items-center rounded-lg border border-input bg-muted/40 px-3 text-sm text-foreground">
         {value || "—"}
       </div>
@@ -57,7 +57,7 @@ export function ReadOnlyField({ label, value }) {
 
 export function EditableFieldLabel({ label }) {
   return (
-    <p className="mb-1 2xl:text-lg text-base font-medium text-[#364153]">
+    <p className="mb-1 2xl:text-lg text-base font-medium text-foreground-light">
       {label} <span className="text-primary">(Editable)</span>
     </p>
   );
