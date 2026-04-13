@@ -75,14 +75,15 @@ export function DocumentRow({ doc, onUpload, uploading }) {
   const [selectedFile, setSelectedFile] = useState(null);
   const inputRef = useRef(null);
 
+  const hasFile = Boolean(doc.uploaded?.fileUrl);
   const canReupload =
     doc.uploaded?.status === "rejected" || doc.uploaded?.status === "reupload_requested";
-  const showPicker = !doc.uploaded || canReupload;
+  const showPicker = !hasFile || canReupload;
 
   const handleConfirmUpload = async () => {
     if (!selectedFile) return;
     try {
-      await onUpload(doc.docTypeId, selectedFile);
+      await onUpload(doc, selectedFile);
       setSelectedFile(null);
     } catch {
       /* keep selected file for retry */
@@ -96,7 +97,12 @@ export function DocumentRow({ doc, onUpload, uploading }) {
           <FileText className="size-4 text-red-500" />
         </div>
         <div>
-          <p className="text-base text-foreground">{doc.name}</p>
+          <p className="text-base text-foreground">
+            {doc.name}
+            {doc.isOther && (
+              <span className="ml-1.5 text-xs font-normal text-muted-foreground">(Requested)</span>
+            )}
+          </p>
           {doc.uploaded && <DocStatusBadge status={doc.uploaded.status} />}
           {doc.uploaded?.adminNote && (
             <p className="mt-1 text-xs text-muted-foreground">
@@ -107,7 +113,7 @@ export function DocumentRow({ doc, onUpload, uploading }) {
       </div>
 
       <div className="flex flex-wrap items-center gap-2">
-        {doc.uploaded && !uploading && (
+        {hasFile && !uploading && (
           <>
             <a
               href={getDownloadUrl(doc.uploaded.fileUrl)}
@@ -150,7 +156,7 @@ export function DocumentRow({ doc, onUpload, uploading }) {
               onClick={() => inputRef.current?.click()}
             >
               <Plus className="size-3.5" />
-              {doc.uploaded ? "Re-upload" : "Add Document"}
+              {hasFile ? "Re-upload" : "Add Document"}
             </Button>
           </>
         )}
@@ -198,6 +204,10 @@ export function DocumentRow({ doc, onUpload, uploading }) {
   );
 }
 
+export function documentRowKey(doc) {
+  return doc.userDocumentId ?? `type-${doc.docTypeId}`;
+}
+
 export function DocumentsSection({ documents, onUpload, uploadingDocId }) {
   return (
     <SectionCard title="Uploaded Documents">
@@ -207,10 +217,10 @@ export function DocumentsSection({ documents, onUpload, uploadingDocId }) {
         <div className="divide-y divide-border rounded-lg border border-border">
           {documents.map((doc) => (
             <DocumentRow
-              key={doc.docTypeId}
+              key={documentRowKey(doc)}
               doc={doc}
               onUpload={onUpload}
-              uploading={uploadingDocId === doc.docTypeId}
+              uploading={uploadingDocId === documentRowKey(doc)}
             />
           ))}
         </div>

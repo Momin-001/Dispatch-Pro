@@ -44,6 +44,7 @@ export default function DispatcherApplicationsPage() {
       columns={columns}
       filters={filters}
       searchPlaceholder="Search (name/email/license)"
+      detailHref={(row) => `/admin/applications/dispatcher/${row.id}`}
     />
   );
 }

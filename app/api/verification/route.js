@@ -49,7 +49,6 @@ async function handleGet(request) {
     if (!user) {
       return errorResponse("User not found.", 404);
     }
-
     const rows = await db
       .select({
         docTypeId: verificationDocumentTypes.id,
@@ -75,6 +74,8 @@ async function handleGet(request) {
 
     const documents = rows.map((row) => ({
       docTypeId: row.docTypeId,
+      userDocumentId: null,
+      isOther: false,
       name: row.name,
       slug: row.slug,
       isRequired: row.isRequired,
@@ -88,6 +89,37 @@ async function handleGet(request) {
           }
         : null,
     }));
+
+    const otherRows = await db
+      .select({
+        id: userDocuments.id,
+        otherDocName: userDocuments.otherDocName,
+        fileUrl: userDocuments.fileUrl,
+        docStatus: userDocuments.status,
+        adminNote: userDocuments.adminNote,
+        uploadedAt: userDocuments.uploadedAt,
+      })
+      .from(userDocuments)
+      .where(and(eq(userDocuments.userId, userId), eq(userDocuments.isOther, true)))
+      .orderBy(asc(userDocuments.uploadedAt));
+
+    for (const r of otherRows) {
+      documents.push({
+        docTypeId: null,
+        userDocumentId: r.id,
+        isOther: true,
+        name: r.otherDocName?.trim() || "Additional document",
+        slug: null,
+        isRequired: false,
+        uploaded: {
+          id: r.id,
+          fileUrl: r.fileUrl || "",
+          status: r.docStatus,
+          adminNote: r.adminNote,
+          uploadedAt: r.uploadedAt,
+        },
+      });
+    }
 
     return successResponse("Verification data fetched.", {
       user: {

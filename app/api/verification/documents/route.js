@@ -10,17 +10,9 @@ async function handlePost(request) {
     const { userId, role } = request.user;
 
     const formData = await request.formData();
+    const documentIdRaw = formData.get("documentId");
     const docTypeIdRaw = formData.get("docTypeId");
     const fileEntry = formData.get("file");
-
-    if (!docTypeIdRaw) {
-      return errorResponse("Document type ID is required.", 400);
-    }
-
-    const docTypeId = Number(docTypeIdRaw);
-    if (Number.isNaN(docTypeId)) {
-      return errorResponse("Invalid document type ID.", 400);
-    }
 
     if (
       !fileEntry ||
@@ -40,6 +32,48 @@ async function handlePost(request) {
       return errorResponse("User not found.", 404);
     }
 
+    const buffer = Buffer.from(await fileEntry.arrayBuffer());
+    const uploadResult = await uploadApplicationFile(buffer, {
+      role,
+      mimeType: fileEntry.type || "application/octet-stream",
+      originalFilename: fileEntry.name,
+    });
+
+    const uploadPayload = {
+      fileUrl: uploadResult.secure_url,
+      cloudinaryPublicId: uploadResult.public_id,
+      status: "pending",
+      adminNote: null,
+      uploadedAt: new Date(),
+      reviewedAt: null,
+    };
+
+    if (documentIdRaw && String(documentIdRaw).trim()) {
+      const documentId = String(documentIdRaw).trim();
+      const [otherRow] = await db
+        .select({ id: userDocuments.id, isOther: userDocuments.isOther })
+        .from(userDocuments)
+        .where(and(eq(userDocuments.id, documentId), eq(userDocuments.userId, userId)))
+        .limit(1);
+
+      if (!otherRow || !otherRow.isOther) {
+        return errorResponse("Document request not found.", 404);
+      }
+
+      await db.update(userDocuments).set(uploadPayload).where(eq(userDocuments.id, documentId));
+
+      return successResponse("Document uploaded successfully.");
+    }
+
+    if (!docTypeIdRaw) {
+      return errorResponse("Document type ID or document ID is required.", 400);
+    }
+
+    const docTypeId = Number(docTypeIdRaw);
+    if (Number.isNaN(docTypeId)) {
+      return errorResponse("Invalid document type ID.", 400);
+    }
+
     const [docType] = await db
       .select()
       .from(verificationDocumentTypes)
@@ -55,13 +89,6 @@ async function handlePost(request) {
       return errorResponse("Document type not found or does not belong to your role.", 400);
     }
 
-    const buffer = Buffer.from(await fileEntry.arrayBuffer());
-    const uploadResult = await uploadApplicationFile(buffer, {
-      role,
-      mimeType: fileEntry.type || "application/octet-stream",
-      originalFilename: fileEntry.name,
-    });
-
     const existing = await db
       .select({ id: userDocuments.id })
       .from(userDocuments)
@@ -76,14 +103,7 @@ async function handlePost(request) {
     if (existing.length > 0) {
       await db
         .update(userDocuments)
-        .set({
-          fileUrl: uploadResult.secure_url,
-          cloudinaryPublicId: uploadResult.public_id,
-          status: "pending",
-          adminNote: null,
-          uploadedAt: new Date(),
-          reviewedAt: null,
-        })
+        .set(uploadPayload)
         .where(eq(userDocuments.id, existing[0].id));
     } else {
       await db.insert(userDocuments).values({

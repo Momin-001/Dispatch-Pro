@@ -45,6 +45,7 @@ export default function DriverApplicationsPage() {
       columns={columns}
       filters={filters}
       searchPlaceholder="Search (name/email/license)"
+      detailHref={(row) => `/admin/applications/driver/${row.id}`}
     />
   );
 }

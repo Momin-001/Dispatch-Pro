@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useCallback, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { useDebounce } from "use-debounce";
 import {
   Eye,
@@ -71,6 +72,7 @@ function StatusBadge({ status }) {
  * @param {Array}    columns        – [{ key, header, render? }]
  * @param {Array}    filters        – [{ key, placeholder, type: "input"|"select", options? }]
  * @param {string}   searchPlaceholder
+ * @param {function} detailHref      – (row) => href string for detail page
  */
 export function ApplicationsTable({
   title,
@@ -79,7 +81,9 @@ export function ApplicationsTable({
   columns,
   filters = [],
   searchPlaceholder = "Search (name/email)",
+  detailHref,
 }) {
+  const router = useRouter();
   const [data, setData] = useState([]);
   const [total, setTotal] = useState(0);
   const [page, setPage] = useState(1);
@@ -276,6 +280,7 @@ export function ApplicationsTable({
                         size="icon"
                         title="View details"
                         className="text-primary-dark border-primary-dark rounded-full"
+                        onClick={() => detailHref && router.push(detailHref(row))}
                       >
                         <Eye className="size-3" />
                       </Button>

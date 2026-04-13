@@ -40,6 +40,7 @@ export default function ShipperApplicationsPage() {
       columns={columns}
       filters={filters}
       searchPlaceholder="Search (name or company name)"
+      detailHref={(row) => `/admin/applications/shipper/${row.id}`}
     />
   );
 }

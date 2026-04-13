@@ -15,6 +15,7 @@ import {
   ReadOnlyField,
   EditableFieldLabel,
   DocumentsSection,
+  documentRowKey,
 } from "@/components/dashboard/verification-shared";
 
 const currentYear = new Date().getFullYear();
@@ -88,11 +89,15 @@ export default function OwnerOperatorVerificationPage() {
     }
   };
 
-  const handleDocUpload = async (docTypeId, file) => {
-    setUploadingDocId(docTypeId);
+  const handleDocUpload = async (doc, file) => {
+    setUploadingDocId(documentRowKey(doc));
     try {
       const fd = new FormData();
-      fd.append("docTypeId", String(docTypeId));
+      if (doc.userDocumentId) {
+        fd.append("documentId", doc.userDocumentId);
+      } else {
+        fd.append("docTypeId", String(doc.docTypeId));
+      }
       fd.append("file", file);
       const { data } = await api.post("/api/verification/documents", fd);
       toast.success(data.message);

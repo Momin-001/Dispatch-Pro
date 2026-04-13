@@ -51,6 +51,7 @@ export default function OwnerOperatorApplicationsPage() {
       columns={columns}
       filters={filters}
       searchPlaceholder="Search (name)"
+      detailHref={(row) => `/admin/applications/owner_operator/${row.id}`}
     />
   );
 }
