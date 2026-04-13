@@ -8,7 +8,7 @@ const DOC_STATUS = {
     reupload_requested: { label: "Re-upload", icon: RotateCcw, className: "text-orange-600 bg-orange-50" },
   };
   
-  export function DocStatusBadge({ status, showIcon = true }) {
+  export const DocStatusBadge = ({ status, showIcon = true }) => {
     const cfg = DOC_STATUS[status] || DOC_STATUS.pending;
     const Icon = cfg.icon;
   
@@ -23,13 +23,14 @@ const DOC_STATUS = {
         {cfg.label}
       </span>
     );
-  }
+  };
 
-export function getDownloadUrl(fileUrl) {
-    if (!fileUrl) return fileUrl;
+export const getDownloadUrl = (fileUrl) => {
+    if (!fileUrl) 
+      return fileUrl;
     if (fileUrl.includes("/upload/")) {
       return fileUrl.replace("/upload/", "/upload/fl_attachment/");
     }
     return fileUrl;
-  }
+  };
 
