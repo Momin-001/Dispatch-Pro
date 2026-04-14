@@ -8,9 +8,6 @@ const ALLOWED_ACTIONS = ["approved", "reupload_requested"];
 
 async function handlePatch(request) {
   try {
-    if (request.user.role !== "admin") {
-      return errorResponse("Admin access required.", 403);
-    }
 
     const body = await request.json();
     const { documentId, action, adminNote } = body;
@@ -61,9 +58,6 @@ async function handlePatch(request) {
 
 async function handlePost(request) {
   try {
-    if (request.user.role !== "admin") {
-      return errorResponse("Admin access required.", 403);
-    }
 
     const body = await request.json();
     const { userId, documentName } = body;

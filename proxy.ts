@@ -21,6 +21,13 @@ const ROLE_DASHBOARD_MAP: Record<string, string> = {
   shipper: "/shipper",
   owner_operator: "/owner_operator",
 };
+const API_ROLE_PREFIXES: Record<string, string> = {
+  admin: "/api/admin",
+  driver: "/api/driver",
+  dispatcher: "/api/dispatcher",
+  shipper: "/api/shipper",
+  owner_operator: "/api/owner_operator",
+};
 
 async function verifyAccessToken(token: string) {
   try {
@@ -42,6 +49,31 @@ export async function proxy(request: NextRequest) {
   );
   const isAuthPage = AUTH_PAGES.some((page) => pathname.startsWith(page));
 
+  const isApiRoute = pathname.startsWith("/api");
+
+  // =========================
+  // 🔐 API ROUTE PROTECTION
+  // =========================
+  if (isApiRoute) {
+    // Not logged in
+    if (!user) {
+      return NextResponse.json(
+        { message: "Unauthorized" },
+        { status: 401 }
+      );
+    }
+
+    // Check role-based API access
+    const allowedApiPrefix = API_ROLE_PREFIXES[user.role];
+
+    if (allowedApiPrefix && !pathname.startsWith(allowedApiPrefix)) {
+      return NextResponse.json(
+        { message: "Forbidden" },
+        { status: 403 }
+      );
+    }
+    return NextResponse.next();
+  }
   // Protected dashboard routes — redirect to signin if not authenticated
   if (isDashboardRoute && !user) {
     const url = request.nextUrl.clone();
@@ -73,6 +105,7 @@ export async function proxy(request: NextRequest) {
 export const config = {
   matcher: [
     "/admin/:path*",
+    "/api/admin/:path*",
     "/driver/:path*",
     "/dispatcher/:path*",
     "/shipper/:path*",

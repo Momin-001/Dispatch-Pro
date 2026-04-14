@@ -11,10 +11,6 @@ async function handleGet(request, { params }) {
   try {
     const { role: roleParam } = await params;
 
-    if (request.user.role !== "admin") {
-      return errorResponse("Admin access required.", 403);
-    }
-
     if (!VALID_ROLES.includes(roleParam)) {
       return errorResponse("Invalid role.", 400);
     }

@@ -8,9 +8,6 @@ const ALLOWED_ACTIONS = ["approved", "rejected"];
 
 async function handlePatch(request) {
   try {
-    if (request.user.role !== "admin") {
-      return errorResponse("Admin access required.", 403);
-    }
 
     const body = await request.json();
     const { userId, action } = body;

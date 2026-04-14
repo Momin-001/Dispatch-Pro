@@ -8,9 +8,6 @@ const VALID_ROLES = ["driver", "dispatcher", "shipper", "owner_operator"];
 
 async function handleGet(request, { params }) {
   try {
-    if (request.user.role !== "admin") {
-      return errorResponse("Admin access required.", 403);
-    }
 
     const { role: roleParam, id: userId } = await params;
 

@@ -14,7 +14,7 @@ import { successResponse, errorResponse } from "@/lib/response.handle";
 import { NEXT_PUBLIC_APP_URL, SMTP_USER } from "@/lib/constants";
 import { uploadApplicationFile } from "@/lib/uploads/application-file";
 
-const VALID_ROLES = ["driver", "dispatcher", "shipper"];
+const VALID_ROLES = ["driver", "dispatcher", "shipper", "owner_operator"];
 
 /** Slugs must match `lib/db/seed/documents.js` */
 const INITIAL_UPLOAD_SLUG_BY_ROLE = {
@@ -113,12 +113,8 @@ export async function POST(request) {
       return errorResponse("Full name, email, and role are required.", 400);
     }
 
-    if (!phone) {
-      return errorResponse("Phone number is required.", 400);
-    }
-
     if (!VALID_ROLES.includes(roleName)) {
-      return errorResponse("Invalid role. Must be driver, dispatcher, or shipper.", 400);
+      return errorResponse("Invalid role.", 400);
     }
 
     const existingUser = await db
@@ -139,11 +135,6 @@ export async function POST(request) {
 
     if (!role) {
       return errorResponse("Role not found.", 400);
-    }
-
-    const needsInitialDocument = roleName === "driver" || roleName === "dispatcher";
-    if (needsInitialDocument && !file) {
-      return errorResponse(roleName === "driver" ? "CDL document is required." : "Resume is required.", 400);
     }
 
     if (roleName === "shipper" && file) {
