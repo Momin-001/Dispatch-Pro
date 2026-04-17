@@ -1,7 +1,6 @@
 import { eq } from "drizzle-orm";
 import { db } from "@/lib/db";
-import { userDocuments, verificationDocumentTypes, users } from "@/lib/db/schema";
-import { withAuth } from "@/lib/middleware/with-auth";
+import { userDocuments, users } from "@/lib/db/schema";
 import { successResponse, errorResponse } from "@/lib/response.handle";
 
 const ALLOWED_ACTIONS = ["approved", "reupload_requested"];
@@ -92,5 +91,5 @@ async function handlePost(request) {
   }
 }
 
-export const PATCH = withAuth(handlePatch);
-export const POST = withAuth(handlePost);
+export const PATCH = handlePatch;
+export const POST = handlePost;

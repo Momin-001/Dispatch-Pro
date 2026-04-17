@@ -42,6 +42,7 @@ export default function SuspenseSetPasswordPage() {
     </Suspense>
   );
 }
+
 function SetPasswordPage() {
   const searchParams = useSearchParams();
   const router = useRouter();

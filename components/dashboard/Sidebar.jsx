@@ -7,10 +7,9 @@ import { Menu, LogOut, ChevronDown } from "lucide-react";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 
 import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger, SheetTitle, SheetDescription } from "@/components/ui/sheet";
 import { useAuth } from "@/context/auth-context";
-import { getFilteredNav } from "./nav-config";
+import { getFilteredNav } from "../../lib/nav-config";
 
 function NavItem({ item, pathname, onNavigate }) {
   const [open, setOpen] = useState(false);

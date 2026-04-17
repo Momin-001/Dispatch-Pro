@@ -16,7 +16,7 @@ import {
   EditableFieldLabel,
   DocumentsSection,
   documentRowKey,
-} from "@/components/dashboard/Verification/verification-helpers";
+} from "@/components/verification-helpers";
 
 export default function DriverVerificationPage() {
   const [loading, setLoading] = useState(true);

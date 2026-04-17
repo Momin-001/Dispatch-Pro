@@ -1,7 +1,6 @@
 import { eq, and, ne, ilike, or, sql, desc } from "drizzle-orm";
 import { db } from "@/lib/db";
 import { users, roles } from "@/lib/db/schema";
-import { withAuth } from "@/lib/middleware/with-auth";
 import { successResponse, errorResponse } from "@/lib/response.handle";
 
 const VALID_ROLES = ["driver", "dispatcher", "shipper", "owner_operator"];
@@ -126,4 +125,4 @@ async function handleGet(request, { params }) {
   }
 }
 
-export const GET = withAuth(handleGet);
+export const GET = handleGet;

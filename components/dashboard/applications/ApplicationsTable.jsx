@@ -34,7 +34,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import api from "@/lib/axios";
 import { Card } from "@/components/ui/card";
-import { UserStatusBadge } from "@/components/dashboard/helpers";
+import { UserStatusBadge } from "@/components/helpers";
 /**
  * Shared applications table component.
  *

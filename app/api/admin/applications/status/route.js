@@ -1,7 +1,6 @@
 import { eq } from "drizzle-orm";
 import { db } from "@/lib/db";
 import { users, userDocuments } from "@/lib/db/schema";
-import { withAuth } from "@/lib/middleware/with-auth";
 import { successResponse, errorResponse } from "@/lib/response.handle";
 
 const ALLOWED_ACTIONS = ["approved", "rejected"];
@@ -56,4 +55,4 @@ async function handlePatch(request) {
   }
 }
 
-export const PATCH = withAuth(handlePatch);
+export const PATCH = handlePatch;

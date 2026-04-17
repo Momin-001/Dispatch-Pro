@@ -1,14 +1,12 @@
 import { eq, and, ne, ilike, or, sql, desc } from "drizzle-orm";
 import { db } from "@/lib/db";
 import { users, roles } from "@/lib/db/schema";
-import { withAuth } from "@/lib/middleware/with-auth";
 import { successResponse, errorResponse } from "@/lib/response.handle";
 
 const PER_PAGE = 10;
 
 async function handleGet(request) {
   try {
-
     const url = new URL(request.url);
     const page = Math.max(1, parseInt(url.searchParams.get("page") || "1", 10));
     const search = (url.searchParams.get("search") || "").trim();
@@ -79,4 +77,4 @@ async function handleGet(request) {
   }
 }
 
-export const GET = withAuth(handleGet);
+export const GET = handleGet;

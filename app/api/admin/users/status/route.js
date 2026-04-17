@@ -1,7 +1,6 @@
 import { eq } from "drizzle-orm";
 import { db } from "@/lib/db";
 import { users } from "@/lib/db/schema";
-import { withAuth } from "@/lib/middleware/with-auth";
 import { successResponse, errorResponse } from "@/lib/response.handle";
 
 async function handlePatch(request) {
@@ -45,4 +44,4 @@ async function handlePatch(request) {
   }
 }
 
-export const PATCH = withAuth(handlePatch);
+export const PATCH = handlePatch;

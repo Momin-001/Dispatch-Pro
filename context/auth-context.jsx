@@ -3,16 +3,9 @@
 import { createContext, useContext, useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import api from "@/lib/axios";
+import { ROLE_DASHBOARD_MAP } from "@/lib/helpers";
 
 const AuthContext = createContext(null);
-
-const DASHBOARD_ROUTES = {
-  admin: "/admin",
-  driver: "/driver",
-  dispatcher: "/dispatcher",
-  shipper: "/shipper",
-  owner_operator: "/owner_operator",
-};
 
 export function AuthProvider({ children }) {
   const router = useRouter();
@@ -48,8 +41,8 @@ export function AuthProvider({ children }) {
       setIsAuthenticated(true);
 
       const role = data.data.user.role;
-      const dashboardPath = DASHBOARD_ROUTES[role] || "/";
-      router.push(dashboardPath);
+      const dashboardRoute = ROLE_DASHBOARD_MAP[role] || "/";
+      router.push(dashboardRoute);
 
       return data;
     },
@@ -68,8 +61,7 @@ export function AuthProvider({ children }) {
     router.push("/signin");
   }, [router]);
 
-  const hasPermission = useCallback(
-    (permissionKey) => permissions.includes(permissionKey),
+  const hasPermission = useCallback((permissionKey) => permissions.includes(permissionKey),
     [permissions]
   );
 

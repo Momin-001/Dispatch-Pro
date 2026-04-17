@@ -6,10 +6,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import { Mail, Lock, ArrowLeft, Loader2 } from "lucide-react";
 import Link from "next/link";
-
+import { useSearchParams } from "next/navigation";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/context/auth-context";
+import { Suspense, useEffect } from "react";
 
 const signInSchema = z.object({
   email: z.string().email("Enter a valid email address"),
@@ -26,8 +27,20 @@ function FieldLabel({ icon: Icon, children, required }) {
   );
 }
 
-export default function SignInPage() {
+export default function SuspenseSignInPage() {
+  return (
+    <Suspense fallback={
+      <div className="flex min-h-screen items-center justify-center">
+        <Loader2 className="size-8 animate-spin text-primary" />
+      </div>}>
+      <SignInPage />
+    </Suspense>
+  );
+}
+function SignInPage() {
   const { login } = useAuth();
+  const searchParams = useSearchParams();
+  const reason = searchParams.get("reason");
 
   const {
     register,
@@ -50,6 +63,11 @@ export default function SignInPage() {
     }
   };
 
+  useEffect(() => {
+    if (reason === "unauthorized") {
+      toast.error("Session expired. Please log in again.");
+    }
+  }, [reason]);
   return (
     <div className="rounded-2xl bg-background p-3">
       <div className="mb-6">
