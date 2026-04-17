@@ -2,7 +2,7 @@
 
 import { use } from "react";
 import { format } from "date-fns";
-import { ApplicationDetail } from "@/components/dashboard/applications/ApplicationDetail";
+import { ApplicationDetail } from "@/components/dashboard/Applications/ApplicationDetail";
 
 function formatDate(value) {
   if (value == null || value === "") return "—";

@@ -1,7 +1,7 @@
 "use client";
 
 import { use } from "react";
-import { ApplicationDetail } from "@/components/dashboard/applications/ApplicationDetail";
+import { ApplicationDetail } from "@/components/dashboard/Applications/ApplicationDetail";
 
 const infoSections = [
   {
