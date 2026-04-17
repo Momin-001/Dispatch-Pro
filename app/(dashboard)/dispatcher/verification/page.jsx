@@ -40,7 +40,7 @@ export default function DispatcherVerificationPage() {
       reset({
         fullName: data.data.user.fullName || "",
         phone: data.data.user.phone || "",
-        licenseNumber: data.data.user.licenseNumber || "",
+        cdlNumber: data.data.user.cdlNumber || "",
         yearsExperience: data.data.user.yearsExperience || "",
         region: data.data.user.region || "",
         address: data.data.user.address || "",
@@ -143,7 +143,7 @@ export default function DispatcherVerificationPage() {
             <ReadOnlyField label="Email" value={profile.email} />
             <div>
               <EditableFieldLabel label="CDL Number" />
-              <Input inputMode="numeric" placeholder="CDL Number" {...register("licenseNumber")} />
+              <Input inputMode="numeric" placeholder="CDL Number" {...register("cdlNumber")} />
             </div>
           </div>
 

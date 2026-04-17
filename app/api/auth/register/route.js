@@ -23,12 +23,11 @@ const INITIAL_UPLOAD_SLUG_BY_ROLE = {
 };
 
 const PROFILE_FIELD_NAMES = [
-  "licenseNumber",
+  "cdlNumber",
   "yearsExperience",
   "equipmentType",
   "companyName",
   "monthlyLoadEstimate",
-  "serviceType",
   "region",
 ];
 
@@ -100,12 +99,12 @@ export async function POST(request) {
       phone,
       roleName,
       file,
-      licenseNumber,
+      cdlNumber,
       yearsExperience,
       equipmentType,
+      shippmentType,
       companyName,
       monthlyLoadEstimate,
-      serviceType,
       region,
     } = parsed;
 
@@ -187,12 +186,12 @@ export async function POST(request) {
           phone: String(phone).trim(),
           roleId: role.id,
           status: "pending_password",
-          licenseNumber,
+          cdlNumber,
           yearsExperience,
           equipmentType,
+          shippmentType,
           companyName,
           monthlyLoadEstimate,
-          serviceType,
           region,
         })
         .returning();

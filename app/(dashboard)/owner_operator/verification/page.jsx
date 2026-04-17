@@ -61,6 +61,7 @@ export default function OwnerOperatorVerificationPage() {
         phone: data.data.user.phone || "",
         equipmentType: data.data.user.equipmentType || "",
         vehicleYear: data.data.user.vehicleYear || "",
+        registrationNumber: data.data.user.registrationNumber || "",
         vinNumber: data.data.user.vinNumber || "",
         insuranceExpiry: data.data.user.insuranceExpiry || "",
         inspectionExpiry: data.data.user.inspectionExpiry || "",
@@ -199,6 +200,11 @@ export default function OwnerOperatorVerificationPage() {
                 <p className="mt-1 text-xs text-destructive">{errors.vehicleYear.message}</p>
               )}
             </div>
+          </div>
+
+          <div>
+            <EditableFieldLabel label="Registration Number" />
+            <Input placeholder="e.g. 1234567890" {...register("registrationNumber")} />
           </div>
 
           <div>

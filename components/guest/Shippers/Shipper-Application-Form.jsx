@@ -27,7 +27,7 @@ const shipperApplicationSchema = z.object({
     .string()
     .min(1, "Monthly loads is required")
     .regex(/^\d{1,8}$/u, "Enter up to 8 numeric digits for monthly loads"),
-  equipmentType: z.string().min(1, "Equipment type is required"),
+  shippmentType: z.string().min(1, "Shippment type is required"),
 });
 
 function FieldLabel({ icon: Icon, children, required }) {
@@ -55,7 +55,7 @@ export function ShipperApplicationForm({ data }) {
       email: "",
       companyName: "",
       monthlyLoads: "",
-      equipmentType: "",
+      shippmentType: "",
     },
   });
 
@@ -68,7 +68,7 @@ export function ShipperApplicationForm({ data }) {
         role: "shipper",
         companyName: values.companyName,
         monthlyLoadEstimate: values.monthlyLoads,
-        equipmentType: values.equipmentType,
+        shippmentType: values.shippmentType,
       });
       toast.success(data.message);
       reset();
@@ -166,16 +166,16 @@ export function ShipperApplicationForm({ data }) {
         <div className="grid gap-4 sm:grid-cols-2">
           <div>
             <FieldLabel icon={Truck} required>
-              Equipment Type
+              Shippment Type
             </FieldLabel>
             <Input
-              placeholder="e.g. Dry Van, Reefer, Flatbed"
-              aria-invalid={!!errors.equipmentType}
-              {...register("equipmentType")}
+              placeholder="e.g. LTL, FTL, Full Truckload"
+              aria-invalid={!!errors.shippmentType}
+              {...register("shippmentType")}
             />
-            {errors.equipmentType && (
+            {errors.shippmentType && (
               <p className="mt-1 text-xs text-destructive">
-                {errors.equipmentType.message}
+                {errors.shippmentType.message}
               </p>
             )}
           </div>

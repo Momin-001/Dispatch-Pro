@@ -9,7 +9,7 @@ const columns = [
   { key: "yearsExperience", header: "Experience" ,
     render: (row) => (row.yearsExperience ? `${row.yearsExperience} yrs` : "—"),
   },
-  { key: "licenseNumber", header: "License" },
+  { key: "cdlNumber", header: "CDL" },
   { key: "state", header: "State" },
   { key: "status", header: "Status" },
   {
@@ -44,7 +44,7 @@ export default function DriverApplicationsPage() {
       roleSlug="driver"
       columns={columns}
       filters={filters}
-      searchPlaceholder="Search (name/email/license)"
+      searchPlaceholder="Search (name/email/cdl)"
       detailHref={(row) => `/admin/applications/driver/${row.id}`}
     />
   );

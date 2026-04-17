@@ -83,7 +83,7 @@ export function DispatcherApplicationForm() {
       fd.append("email", values.email);
       fd.append("phone", values.phone);
       fd.append("role", "dispatcher");
-      fd.append("licenseNumber", values.cdlNumber);
+      fd.append("cdlNumber", values.cdlNumber);
       fd.append("yearsExperience", values.yearsExperience);
       fd.append("region", values.region);
       if (values.resumeFile?.[0]) {

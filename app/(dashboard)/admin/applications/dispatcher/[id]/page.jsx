@@ -20,7 +20,7 @@ const infoSections = [
   {
     title: "Other Information",
     fields: [
-      { label: "CDL Number", valueKey: "licenseNumber" },
+      { label: "CDL Number", valueKey: "cdlNumber" },
       { label: "Experience", valueKey: "yearsExperience" },
     ],
   },

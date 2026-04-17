@@ -10,11 +10,6 @@ const columns = [
     header: "Equipment",
     render: (row) => row.equipmentType || "—",
   },
-  {
-    key: "yearsExperience",
-    header: "Experience",
-    render: (row) => (row.yearsExperience ? `${row.yearsExperience} yrs` : "—"),
-  },
   { key: "state", header: "State" },
   { key: "status", header: "Status" },
   {
@@ -26,7 +21,6 @@ const columns = [
 ];
 
 const filters = [
-  { key: "experience", placeholder: "Experience", type: "input" },
   { key: "equipmentType", placeholder: "Equipment type", type: "input" },
   { key: "state", placeholder: "State", type: "input" },
   {

@@ -83,7 +83,7 @@ export function DriverApplicationForm() {
       fd.append("email", values.email);
       fd.append("phone", values.phone);
       fd.append("role", "driver");
-      fd.append("licenseNumber", values.cdlNumber);
+      fd.append("cdlNumber", values.cdlNumber);
       fd.append("yearsExperience", values.yearsExperience);
       fd.append("equipmentType", values.equipmentType);
       if (values.cdlFile?.[0]) {

@@ -42,7 +42,7 @@ export default function ShipperVerificationPage() {
         phone: data.data.user.phone || "",
         companyName: data.data.user.companyName || "",
         monthlyLoadEstimate: data.data.user.monthlyLoadEstimate || "",
-        equipmentType: data.data.user.equipmentType || "",
+        shippmentType: data.data.user.shippmentType || "",
         address: data.data.user.address || "",
         city: data.data.user.city || "",
         state: data.data.user.state || "",
@@ -158,12 +158,12 @@ export default function ShipperVerificationPage() {
 
           <div className="grid gap-4 sm:grid-cols-2">
             <div>
-              <EditableFieldLabel label="Average Monthly Loads" />
-              <Input inputMode="numeric" placeholder="e.g. 50" {...register("monthlyLoadEstimate")} />
+              <EditableFieldLabel label="Shippment Type" />
+              <Input placeholder="e.g. LTL, FTL, Full Truckload" {...register("shippmentType")} />
             </div>
             <div>
-              <EditableFieldLabel label="Equipment Type" />
-              <Input placeholder="e.g. Dry Van, Reefer, Flatbed" {...register("equipmentType")} />
+              <EditableFieldLabel label="Average Monthly Loads" />
+              <Input inputMode="numeric" placeholder="e.g. 50" {...register("monthlyLoadEstimate")} />
             </div>
           </div>
 

@@ -107,8 +107,6 @@ export const config = {
 
     "/owner_operator/:path*",
     "/api/owner_operator/:path*",
-
-    "/api/verification/:path*",
     
     "/signin",
     "/forget-password",

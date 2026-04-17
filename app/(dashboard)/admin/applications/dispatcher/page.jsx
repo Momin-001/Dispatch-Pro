@@ -43,7 +43,7 @@ export default function DispatcherApplicationsPage() {
       roleSlug="dispatcher"
       columns={columns}
       filters={filters}
-      searchPlaceholder="Search (name/email/license)"
+      searchPlaceholder="Search (name/email/cdl)"
       detailHref={(row) => `/admin/applications/dispatcher/${row.id}`}
     />
   );

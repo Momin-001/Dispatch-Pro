@@ -45,7 +45,7 @@ async function handleGet(request, { params }) {
           or(
             ilike(users.fullName, `%${search}%`),
             ilike(users.email, `%${search}%`),
-            ilike(users.licenseNumber, `%${search}%`)
+            ilike(users.cdlNumber, `%${search}%`)
           )
         );
       }
@@ -95,12 +95,13 @@ async function handleGet(request, { params }) {
         email: users.email,
         phone: users.phone,
         status: users.status,
-        licenseNumber: users.licenseNumber,
+        cdlNumber: users.cdlNumber,
         yearsExperience: users.yearsExperience,
         equipmentType: users.equipmentType,
+        shippmentType: users.shippmentType,
         companyName: users.companyName,
         monthlyLoadEstimate: users.monthlyLoadEstimate,
-        serviceType: users.serviceType,
+        registrationNumber: users.registrationNumber,
         state: users.state,
         region: users.region,
         industry: users.industry,
