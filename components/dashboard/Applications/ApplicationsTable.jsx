@@ -260,14 +260,14 @@ export function ApplicationsTable({
                         <>
                           <Button
                             variant="light"
-                            size="rounded"
+                           
                             onClick={() => openConfirm(row.id, "approved")}
                           >
                             Approve
                           </Button>
                           <Button
                             variant="destructive"
-                            size="rounded"
+                           
                             onClick={() => openConfirm(row.id, "rejected")}
                           >
                             Reject

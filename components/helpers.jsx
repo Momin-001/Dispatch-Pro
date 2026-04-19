@@ -1,7 +1,7 @@
 import { Check, X } from "lucide-react";
 
 import { cn } from "@/lib/utils";
-import { DOC_STATUS, USER_STATUS } from "@/lib/helpers";
+import { DOC_STATUS, USER_STATUS, BLOG_STATUS, BLOG_CATEGORY_STATUS } from "@/lib/helpers";
 
 export function DocStatusBadge({ status, showIcon = true }) {
   const cfg = DOC_STATUS[status] || DOC_STATUS.pending;
@@ -38,6 +38,32 @@ export function UserStatusBadge({ status }) {
       )}
     >
       {USER_STATUS[status]?.label || status}
+    </span>
+  );
+}
+
+export function BlogStatusBadge({ status }) {
+  return (
+    <span
+      className={cn(
+        "inline-flex items-center rounded-full px-3 py-1.5 text-xs font-medium capitalize",
+        BLOG_STATUS[status]?.className || "bg-gray-100 text-gray-700"
+      )}
+    >
+      {BLOG_STATUS[status]?.label || status}
+    </span>
+  );
+}
+
+export function BlogCategoryStatusBadge({ status }) {
+  return (
+    <span
+      className={cn(
+        "inline-flex items-center rounded-full px-3 py-1.5 text-xs font-medium",
+        BLOG_CATEGORY_STATUS[status]?.className || "bg-gray-100 text-gray-700"
+      )}
+    >
+      {BLOG_CATEGORY_STATUS[status]?.label || status}
     </span>
   );
 }

@@ -283,7 +283,7 @@ export function ApplicationDetail({
                   {hasFile && doc.uploaded.status !== "approved" && (
                     <Button
                       variant="light"
-                      size="rounded"
+                      
                       disabled={approvingDocId === doc.uploaded.id}
                       onClick={() => handleApproveDoc(doc.uploaded.id)}
                     >
@@ -297,7 +297,7 @@ export function ApplicationDetail({
                   {hasFile && doc.uploaded.status !== "approved" && (
                     <Button
                       variant="info"
-                      size="rounded"
+                      
                       onClick={() => {
                         setReuploadDocId(doc.uploaded.id);
                         setReuploadNote("");
@@ -320,7 +320,7 @@ export function ApplicationDetail({
           <>
             <Button
               variant="light"
-              size="rounded-lg"
+              size="lg"
               onClick={() => {
                 setPendingStatusAction("approved");
                 setStatusDialogOpen(true);
@@ -330,7 +330,7 @@ export function ApplicationDetail({
             </Button>
             <Button
               variant="destructive"
-              size="rounded-lg"
+              size="lg"
               onClick={() => {
                 setPendingStatusAction("rejected");
                 setStatusDialogOpen(true);
@@ -341,7 +341,7 @@ export function ApplicationDetail({
 
             <Button
               variant="info"
-              size="rounded-lg"
+              size="lg"
               onClick={() => {
                 setRequestDocName("");
                 setRequestDocDialogOpen(true);

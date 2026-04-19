@@ -31,8 +31,8 @@ export default function UsersPage() {
   const [totalPages, setTotalPages] = useState(1);
 
   const [search, setSearch] = useState("");
-  const [roleFilter, setRoleFilter] = useState("all");
-  const [statusFilter, setStatusFilter] = useState("all");
+  const [roleFilter, setRoleFilter] = useState("__all__");
+  const [statusFilter, setStatusFilter] = useState("__all__");
 
   // Debounce values so we don't spam the API
   const [debouncedSearch] = useDebounce(search, 400);
@@ -101,9 +101,9 @@ export default function UsersPage() {
       params.set("page", String(page));
       if (debouncedSearch) 
         params.set("search", debouncedSearch);
-      if (roleFilter && roleFilter !== "all") 
+      if (roleFilter && roleFilter !== "__all__") 
         params.set("role", roleFilter);
-      if (statusFilter && statusFilter !== "all") 
+      if (statusFilter && statusFilter !== "__all__") 
         params.set("status", statusFilter);
 
       const { data: res } = await api.get(`/api/admin/users?${params.toString()}`);
@@ -133,8 +133,8 @@ export default function UsersPage() {
 
   const resetFilters = () => {
     setSearch("");
-    setRoleFilter("all");
-    setStatusFilter("all");
+    setRoleFilter("__all__");
+    setStatusFilter("__all__");
   };
 
 
@@ -177,7 +177,7 @@ export default function UsersPage() {
           <>
               <Button
                 variant={isSuspended ? "dark" : "destructive"}
-                size="rounded"
+                
                 onClick={() => {
                   setPendingSuspend(row);
                   setSuspendDialogOpen(true);
@@ -210,7 +210,7 @@ export default function UsersPage() {
       {/* 3. Filter Area */}
       <FilterBar
         onReset={
-          search || roleFilter !== "all" || statusFilter !== "all"
+          search || roleFilter !== "__all__" || statusFilter !== "__all__"
             ? resetFilters
             : undefined
         }
@@ -230,7 +230,7 @@ export default function UsersPage() {
             <SelectValue placeholder="Role" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">All Roles</SelectItem>
+            <SelectItem value="__all__">All Roles</SelectItem>
             {ROLE_OPTIONS.map((r) => (
               <SelectItem key={r.value} value={r.value}>{r.label}</SelectItem>
             ))}
@@ -242,7 +242,7 @@ export default function UsersPage() {
             <SelectValue placeholder="Status" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">All Statuses</SelectItem>
+            <SelectItem value="__all__">All Statuses</SelectItem>
             <SelectItem value="pending_approval">Pending</SelectItem>
             <SelectItem value="approved">Active</SelectItem>
             <SelectItem value="rejected">Rejected</SelectItem>
