@@ -248,10 +248,9 @@ export function ApplicationsTable({
                   <td className="px-4 py-3">
                     <div className="flex items-center gap-2">
                       <Button
-                        variant="outline"
-                        size="icon"
+                        variant="secondary-dark"
                         title="View details"
-                        className="text-primary-dark border-primary-dark rounded-full"
+                        className="rounded-full"
                         onClick={() => detailHref && router.push(detailHref(row))}
                       >
                         <Eye className="size-3" />

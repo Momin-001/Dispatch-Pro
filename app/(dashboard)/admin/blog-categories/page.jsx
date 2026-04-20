@@ -29,7 +29,7 @@ export default function BlogCategoriesPage() {
       params.set("page", String(page));
 
       const { data: res } = await api.get(
-        `/api/admin/blogs/categories?${params.toString()}`
+        `/api/admin/blog-categories?${params.toString()}`
       );
       setData(res.data.categories);
       setTotal(res.data.total);
@@ -83,7 +83,8 @@ export default function BlogCategoriesPage() {
       render: (row) => (
         <Button
           type="button"
-          variant="secondary"
+          variant="secondary-dark"
+          className="rounded-full"
           onClick={() => router.push(`/admin/blog-categories/${row.id}`)}
         >
           <Pencil className="size-3" />

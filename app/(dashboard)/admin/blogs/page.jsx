@@ -61,7 +61,7 @@ export default function BlogsPage() {
     (async () => {
       try {
         const { data: res } = await api.get(
-          "/api/admin/blogs/categories?onlyActive=false"
+          "/api/admin/blog-categories?onlyActive=false"
         );
         if (active) setCategories(res.data.categories || []);
       } catch {
@@ -126,7 +126,7 @@ export default function BlogsPage() {
     pendingToggle?.status === "published" ? "Unpublish" : "Publish";
 
   const confirmTogglePublish = async () => {
-    if (!pendingToggle) 
+    if (!pendingToggle)
       return;
     setToggleLoading(true);
     const nextStatus = pendingToggle.status === "published" ? "draft" : "published";
@@ -193,8 +193,16 @@ export default function BlogsPage() {
           <div className="flex items-center gap-2">
             <Button
               type="button"
+              variant="secondary-dark"
+              className="rounded-full"
+              onClick={() => router.push(`/admin/blogs/${row.id}`)}
+            >
+              <Pencil className="size-3" />
+            </Button>
+            <Button
+              type="button"
               variant={isPublished ? "destructive" : "dark"}
-              
+
               onClick={() => {
                 setPendingToggle(row);
                 setToggleDialogOpen(true);
@@ -210,14 +218,6 @@ export default function BlogsPage() {
                   Publish
                 </>
               )}
-            </Button>
-            <Button
-              type="button"
-              variant="secondary-dark"
-              className="rounded-full"
-              onClick={() => router.push(`/admin/blogs/${row.id}`)}
-            >
-              <Pencil className="size-3" />
             </Button>
           </div>
         );
@@ -242,8 +242,8 @@ export default function BlogsPage() {
       <FilterBar
         onReset={
           search ||
-          categoryFilter !== "__all__" ||
-          statusFilter !== "__all__"
+            categoryFilter !== "__all__" ||
+            statusFilter !== "__all__"
             ? resetFilters
             : undefined
         }

@@ -86,7 +86,7 @@ export function BlogForm({ initialBlog = null, mode = "create" }) {
     (async () => {
       setCategoriesLoading(true);
       try {
-        const { data: res } = await api.get("/api/admin/blogs/categories");
+        const { data: res } = await api.get("/api/admin/blog-categories");
         if (active) setCategories(res.data.categories || []);
       } catch {
         /* axios interceptor */
