@@ -29,7 +29,7 @@ const filters = [
     type: "select",
     options: [
       { value: "pending_approval", label: "Pending" },
-      { value: "approved", label: "Approved" },
+      { value: "active", label: "Active" },
       { value: "rejected", label: "Rejected" },
       { value: "suspended", label: "Suspended" },
     ],

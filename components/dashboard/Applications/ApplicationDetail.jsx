@@ -316,13 +316,13 @@ export function ApplicationDetail({
 
       {/* Global action buttons */}
       <div className="flex flex-wrap items-center gap-3 border-t border-border pt-5">
-        {user.status !== "approved" && user.status !== "rejected" && (
+        {user.status !== "active" && user.status !== "rejected" && (
           <>
             <Button
               variant="light"
               size="lg"
               onClick={() => {
-                setPendingStatusAction("approved");
+                setPendingStatusAction("active");
                 setStatusDialogOpen(true);
               }}
             >
@@ -360,10 +360,10 @@ export function ApplicationDetail({
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>
-              {pendingStatusAction === "approved" ? "Approve" : "Reject"} this application?
+              {pendingStatusAction === "active" ? "Approve" : "Reject"} this application?
             </AlertDialogTitle>
             <AlertDialogDescription>
-              {pendingStatusAction === "approved"
+              {pendingStatusAction === "active"
                 ? "This will approve the user and all their documents. They will gain full system access."
                 : "This will reject the user and all their documents. They will lose access."}
             </AlertDialogDescription>
@@ -371,12 +371,12 @@ export function ApplicationDetail({
           <AlertDialogFooter>
             <AlertDialogCancel disabled={statusLoading}>Cancel</AlertDialogCancel>
             <AlertDialogAction
-              variant={pendingStatusAction === "approved" ? "light" : "destructive"}
+              variant={pendingStatusAction === "active" ? "light" : "destructive"}
               disabled={statusLoading}
               onClick={(e) => { e.preventDefault(); handleGlobalStatus(); }}
             >
               {statusLoading && <Loader2 className="mr-1 size-4 animate-spin" />}
-              {pendingStatusAction === "approved" ? "Approve" : "Reject"}
+              {pendingStatusAction === "active" ? "Approve" : "Reject"}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

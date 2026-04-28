@@ -13,7 +13,7 @@ async function handlePatch(request) {
       return errorResponse("userId and action are required.", 400);
     }
 
-    if (!["suspended", "approved"].includes(action)) {
+    if (!["suspended", "active"].includes(action)) {
       return errorResponse("Invalid action. Must be 'suspended' or 'approved'.", 400);
     }
 

@@ -137,7 +137,7 @@ export function ApplicationsTable({
     }
   };
 
-  const actionLabel = pendingAction?.action === "approved" ? "Approve" : "Reject";
+  const actionLabel = pendingAction?.action === "active" ? "Approve" : "Reject";
 
   return (
     <div className="min-w-0 w-full max-w-full space-y-5">
@@ -255,12 +255,12 @@ export function ApplicationsTable({
                       >
                         <Eye className="size-3" />
                       </Button>
-                      {row.status !== "approved" && row.status !== "rejected" && (
+                      {row.status !== "active" && row.status !== "rejected" && (
                         <>
                           <Button
                             variant="light"
                            
-                            onClick={() => openConfirm(row.id, "approved")}
+                            onClick={() => openConfirm(row.id, "active")}
                           >
                             Approve
                           </Button>
@@ -318,7 +318,7 @@ export function ApplicationsTable({
               {actionLabel} this user?
             </AlertDialogTitle>
             <AlertDialogDescription>
-              {pendingAction?.action === "approved"
+              {pendingAction?.action === "active"
                 ? "This will approve the user and all their uploaded documents. They will gain full access to the system."
                 : "This will reject the user and all their uploaded documents. They will not be able to access the system."}
             </AlertDialogDescription>
@@ -326,7 +326,7 @@ export function ApplicationsTable({
           <AlertDialogFooter>
             <AlertDialogCancel disabled={actionLoading}>Cancel</AlertDialogCancel>
             <AlertDialogAction
-              variant={pendingAction?.action === "approved" ? "light" : "destructive"}
+              variant={pendingAction?.action === "active" ? "light" : "destructive"}
               disabled={actionLoading}
               onClick={(e) => {
                 e.preventDefault();

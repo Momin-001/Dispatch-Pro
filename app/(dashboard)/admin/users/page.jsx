@@ -74,7 +74,7 @@ export default function UsersPage() {
     if (!pendingSuspend) return;
     setSuspendLoading(true);
     const action =
-      pendingSuspend.status === "suspended" ? "approved" : "suspended";
+      pendingSuspend.status === "suspended" ? "active" : "suspended";
     try {
       const { data: res } = await api.patch("/api/admin/users/status", {
         userId: pendingSuspend.id,
@@ -244,7 +244,7 @@ export default function UsersPage() {
           <SelectContent>
             <SelectItem value="__all__">All Statuses</SelectItem>
             <SelectItem value="pending_approval">Pending</SelectItem>
-            <SelectItem value="approved">Active</SelectItem>
+            <SelectItem value="active">Active</SelectItem>
             <SelectItem value="rejected">Rejected</SelectItem>
             <SelectItem value="suspended">Suspended</SelectItem>
           </SelectContent>

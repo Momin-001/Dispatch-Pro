@@ -18,7 +18,7 @@ export default function DashboardLayout({ children }) {
     if (isLoading || !isAuthenticated) return;
 
     const role = user.role.toLowerCase();
-    const isApproved = user.status === "approved";
+    const isApproved = user.status === "active";
 
     if (!isApproved && !isVerificationPage) {
       router.replace(`/${role}/verification`);
@@ -41,10 +41,10 @@ export default function DashboardLayout({ children }) {
   if (!isAuthenticated) return null;
 
   // Approved user trying to access verification — redirect pending
-  if (user.status === "approved" && isVerificationPage) return null;
+  if (user.status === "active" && isVerificationPage) return null;
 
   // Unapproved user trying to access dashboard — redirect pending
-  if (user.status !== "approved" && !isVerificationPage) return null;
+  if (user.status !== "active" && !isVerificationPage) return null;
   
   return (
     <div className="flex min-h-screen">

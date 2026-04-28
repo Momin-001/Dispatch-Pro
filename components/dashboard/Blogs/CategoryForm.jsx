@@ -1,9 +1,12 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
+import { useForm, Controller } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -46,10 +49,20 @@ const EMPTY = {
   status: "active",
 };
 
+const categorySchema = z.object({
+  name: z.string().trim().min(1, "Category name is required.").max(255),
+  slug: z.string().trim().min(1, "Slug is required.").max(240),
+  description: z.string().trim().min(1, "Description is required.").max(255),
+  status: z.enum(["active", "inactive"], { message: "Status is required." }),
+});
+
 export function CategoryForm({ initialCategory = null, mode = "create" }) {
   const router = useRouter();
 
-  const [form, setForm] = useState(() => ({
+  const [submitting, setSubmitting] = useState(false);
+  const [slugTouched, setSlugTouched] = useState(Boolean(initialCategory?.slug));
+
+  const defaultValues = {
     ...EMPTY,
     ...(initialCategory
       ? {
@@ -59,57 +72,53 @@ export function CategoryForm({ initialCategory = null, mode = "create" }) {
           status: initialCategory.status || "active",
         }
       : {}),
-  }));
-  const [slugTouched, setSlugTouched] = useState(Boolean(initialCategory?.slug));
-  const [submitting, setSubmitting] = useState(false);
+  };
+
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    watch,
+    control,
+    formState: { errors },
+  } = useForm({
+    resolver: zodResolver(categorySchema),
+    defaultValues,
+    mode: "onSubmit",
+  });
 
   // Auto-update slug from name when not manually edited
   useEffect(() => {
     if (slugTouched) return;
-    setForm((p) => ({ ...p, slug: slugifyClient(p.name) }));
+    const name = watch("name");
+    setValue("slug", slugifyClient(name), { shouldValidate: false });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [form.name]);
+  }, [watch("name")]);
 
-  const setField = (key, value) => setForm((p) => ({ ...p, [key]: value }));
-
-  const validate = () => {
-    if (!form.name.trim()) return "Category name is required.";
-    if (!form.description.trim()) return "Description is required.";
-    if (!form.status) return "Status is required.";
-    return null;
-  };
-
-  const handleSubmit = async (e) => {
-    e?.preventDefault?.();
-    const error = validate();
-    if (error) {
-      toast.error(error);
-      return;
-    }
-
+  const onSubmit = async (values) => {
     setSubmitting(true);
     try {
       const payload = {
-        name: form.name.trim(),
-        slug: form.slug.trim() || slugifyClient(form.name),
-        description: form.description.trim(),
-        status: form.status,
+        name: values.name.trim(),
+        slug: values.slug.trim() || slugifyClient(values.name),
+        description: values.description.trim(),
+        status: values.status,
       };
 
       if (mode === "create") {
         const { data: res } = await api.post(
-          "/api/admin/blogs/categories",
+          "/api/admin/blog-categories",
           payload
         );
         toast.success(res.message);
       } else {
         const { data: res } = await api.patch(
-          `/api/admin/blogs/categories/${initialCategory.id}`,
+          `/api/admin/blog-categories/${initialCategory.id}`,
           payload
         );
         toast.success(res.message);
       }
-      router.push("/admin/blogs/categories");
+      router.push("/admin/blog-categories");
     } catch {
       /* axios interceptor */
     } finally {
@@ -127,7 +136,7 @@ export function CategoryForm({ initialCategory = null, mode = "create" }) {
   const submitLabel = mode === "create" ? "Create Category" : "Save Changes";
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
       {/* Header */}
       <div>
         <h1 className="text-2xl font-bold text-foreground">{headerTitle}</h1>
@@ -144,62 +153,80 @@ export function CategoryForm({ initialCategory = null, mode = "create" }) {
           <div>
             <FieldLabel required>Category Name</FieldLabel>
             <Input
-              value={form.name}
-              onChange={(e) => setField("name", e.target.value)}
               placeholder="Industry Insights"
               maxLength={255}
+              aria-invalid={Boolean(errors.name)}
+              {...register("name")}
             />
+            {errors.name?.message && (
+              <p className="mt-1 text-xs text-destructive">{String(errors.name.message)}</p>
+            )}
           </div>
 
           <div>
             <FieldLabel required>Slug</FieldLabel>
             <Input
-              value={form.slug}
               onChange={(e) => {
                 setSlugTouched(true);
-                setField("slug", slugifyClient(e.target.value));
+                setValue("slug", slugifyClient(e.target.value), {
+                  shouldValidate: true,
+                });
               }}
               placeholder="industry-insights"
               maxLength={240}
+              aria-invalid={Boolean(errors.slug)}
+              value={watch("slug")}
             />
             <p className="mt-1 text-xs text-muted-foreground">
               Auto-generated from name. You can override it.
             </p>
+            {errors.slug?.message && (
+              <p className="mt-1 text-xs text-destructive">{String(errors.slug.message)}</p>
+            )}
           </div>
         </div>
 
         <div>
           <FieldLabel required>Description</FieldLabel>
           <Textarea
-            value={form.description}
-            onChange={(e) => setField("description", e.target.value)}
             placeholder="Short summary of what this category covers"
             maxLength={255}
             rows={3}
+            aria-invalid={Boolean(errors.description)}
+            {...register("description")}
           />
           <p className="mt-1 text-xs text-muted-foreground">
-            {form.description.length}/255
+            {String(watch("description") || "").length}/255
           </p>
+          {errors.description?.message && (
+            <p className="mt-1 text-xs text-destructive">{String(errors.description.message)}</p>
+          )}
         </div>
 
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
           <div>
             <FieldLabel required>Status</FieldLabel>
-            <Select
-              value={form.status}
-              onValueChange={(v) => setField("status", v)}
-            >
-              <SelectTrigger className="w-full">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                {BLOG_CATEGORY_STATUS_OPTIONS.map((s) => (
-                  <SelectItem key={s.value} value={s.value}>
-                    {s.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            <Controller
+              control={control}
+              name="status"
+              render={({ field }) => (
+                <Select value={field.value} onValueChange={field.onChange}>
+                  <SelectTrigger className="w-full" aria-invalid={Boolean(errors.status)}>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {BLOG_CATEGORY_STATUS_OPTIONS.map((s) => (
+                      <SelectItem key={s.value} value={s.value}>
+                        {s.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              )}
+            />
+            {errors.status?.message && (
+              <p className="mt-1 text-xs text-destructive">{String(errors.status.message)}</p>
+            )}
           </div>
         </div>
       </Card>

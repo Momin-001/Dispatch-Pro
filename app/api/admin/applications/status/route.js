@@ -3,7 +3,7 @@ import { db } from "@/lib/db";
 import { users, userDocuments } from "@/lib/db/schema";
 import { successResponse, errorResponse } from "@/lib/response.handle";
 
-const ALLOWED_ACTIONS = ["approved", "rejected"];
+const ALLOWED_ACTIONS = ["active", "rejected"];
 
 async function handlePatch(request) {
   try {
@@ -29,7 +29,7 @@ async function handlePatch(request) {
       return errorResponse("User not found.", 404);
     }
 
-    const docStatus = action === "approved" ? "approved" : "rejected";
+    const docStatus = action === "active" ? "approved" : "rejected";
     const now = new Date();
 
     await db.transaction(async (tx) => {
@@ -45,7 +45,7 @@ async function handlePatch(request) {
     });
 
     return successResponse(
-      action === "approved"
+      action === "active"
         ? "User has been approved successfully."
         : "User has been rejected."
     );
